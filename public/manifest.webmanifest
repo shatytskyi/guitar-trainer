@@ -1,0 +1,15 @@
+{
+  "name": "Guitar Trainer",
+  "short_name": "Chords",
+  "start_url": "/GuitarTrainer/",
+  "scope": "/GuitarTrainer/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#f0e6d2",
+  "background_color": "#f0e6d2",
+  "icons": [
+    { "src": "/GuitarTrainer/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/GuitarTrainer/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/GuitarTrainer/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
