@@ -22,11 +22,13 @@ export function createRootTile(opts: RootTileOptions): HTMLButtonElement {
     nameDiv.appendChild(em);
   }
 
-  const typesDiv = document.createElement('div');
-  typesDiv.className = 'root-tile__types';
-  typesDiv.textContent = opts.typeLabels.join(' · ');
-
-  btn.append(nameDiv, typesDiv);
+  btn.appendChild(nameDiv);
+  if (opts.typeLabels.length > 0) {
+    const typesDiv = document.createElement('div');
+    typesDiv.className = 'root-tile__types';
+    typesDiv.textContent = opts.typeLabels.join(' · ');
+    btn.appendChild(typesDiv);
+  }
   btn.addEventListener('click', opts.onClick);
   return btn;
 }

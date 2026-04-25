@@ -38,7 +38,9 @@ export function mountBrowseView(host: HTMLElement, deps: BrowseViewDeps): () => 
     for (const r of rootsForSet(deps.settings.get().set)) {
       grid.appendChild(createRootTile({
         root: r.root,
-        typeLabels: r.types.map(t => deps.i18n.t(`chord.type.${t.type}`)),
+        typeLabels: r.types
+          .filter(t => t.type !== '')
+          .map(t => deps.i18n.t(`chord.type.${t.type}`)),
         active: r === state.selectedRoot,
         onClick: () => {
           state = selectRoot(r);
@@ -68,10 +70,10 @@ export function mountBrowseView(host: HTMLElement, deps: BrowseViewDeps): () => 
     const shape = type.shapes[state.shapeIdx]!;
     card.render({
       displayName: chordDisplayName({ root: r.root, type: type.type }),
-      metaText: deps.i18n.t(`chord.type.${type.type}`),
+      metaText: type.type === '' ? '' : deps.i18n.t(`chord.type.${type.type}`),
       types: r.types.map((t, i) => ({
         id: String(i),
-        label: deps.i18n.t(`chord.type.${t.type}`),
+        label: t.type === '' ? '—' : deps.i18n.t(`chord.type.${t.type}`),
         active: i === state.typeIdx,
       })),
       shapes: type.shapes.map((s, i) => ({

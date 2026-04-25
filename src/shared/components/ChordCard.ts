@@ -52,6 +52,7 @@ export function createChordCard(i18n: Translator): ChordCardHandle {
     render(data: ChordCardData, cb: ChordCardCallbacks) {
       paintChordName(name, data.displayName);
       meta.textContent = data.metaText;
+      meta.style.display = data.metaText ? '' : 'none';
 
       typeRow.style.display = data.types.length > 1 ? '' : 'none';
       typeBtns.replaceChildren(...data.types.map(t =>
