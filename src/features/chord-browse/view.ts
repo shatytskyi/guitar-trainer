@@ -36,7 +36,17 @@ export function mountBrowseView(host: HTMLElement, deps: BrowseViewDeps): () => 
   root.appendChild(rootRail);
 
   let state: BrowseState = { selectedRoot: null, typeIdx: 0, shapeIdx: 0 };
-  let card: ChordCardHandle | null = null;
+
+  // Build stage + card once and reuse them. Recreating the card on every
+  // selection threw away its CSS transition state, so the meta-line
+  // animation never had a chance to play.
+  const stage = createStage();
+  const card: ChordCardHandle = createChordCard(deps.i18n);
+  stage.body.appendChild(card.root);
+
+  const empty = document.createElement('div');
+  empty.className = 'browse__empty';
+  empty.textContent = deps.i18n.t('browse.empty');
 
   render();
 
@@ -82,21 +92,14 @@ export function mountBrowseView(host: HTMLElement, deps: BrowseViewDeps): () => 
   }
 
   function paintStage() {
-    stageWrap.replaceChildren();
     if (!state.selectedRoot) {
-      const empty = document.createElement('div');
-      empty.className = 'browse__empty';
-      empty.textContent = deps.i18n.t('browse.empty');
-      stageWrap.appendChild(empty);
-      card = null;
+      stageWrap.replaceChildren(empty);
       return;
     }
 
-    const stage = createStage();
-    stageWrap.appendChild(stage.root);
-
-    card = createChordCard(deps.i18n);
-    stage.body.appendChild(card.root);
+    if (stageWrap.firstChild !== stage.root) {
+      stageWrap.replaceChildren(stage.root);
+    }
 
     const r = state.selectedRoot;
     const type = r.types[state.typeIdx]!;
