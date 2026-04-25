@@ -1,0 +1,57 @@
+/*
+ * Design tokens — PLACEHOLDER for v1.
+ * This file is overwritten when Claude Design returns the design system.
+ * All visual properties consumed by components MUST resolve here.
+ */
+:root {
+  /* Color (semantic) */
+  --surface-page: #f0e6d2;
+  --surface-raised: #e3d5b8;
+  --surface-overlay: rgba(92, 77, 58, 0.08);
+
+  --ink: #2a2520;
+  --ink-soft: #5c4d3a;
+  --on-accent: #f0e6d2;
+
+  --accent: #b8442a;
+  --accent-soft: #d97757;
+  --gold: #a87f3c;
+
+  --border-soft: rgba(92, 77, 58, 0.3);
+  --shadow-1: 0 4px 20px rgba(42, 37, 32, 0.15);
+  --shadow-inset: inset 0 0 60px rgba(168, 127, 60, 0.05);
+
+  /* Typography */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+
+  --text-xs: 9px;
+  --text-sm: 10px;
+  --text-md: 12px;
+  --text-lg: 15px;
+  --text-xl: 22px;
+  --text-2xl: clamp(20px, 5vw, 28px);
+  --text-3xl: clamp(40px, 11vw, 68px);
+
+  --tracking-wide: 0.15em;
+  --tracking-wider: 0.18em;
+
+  /* Spacing (4-base) */
+  --space-1: 4px;
+  --space-2: 6px;
+  --space-3: 9px;
+  --space-4: 12px;
+  --space-5: 14px;
+  --space-6: 18px;
+  --space-7: 24px;
+
+  /* Radius */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-pill: 9px;
+
+  /* Motion */
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --ease-default: cubic-bezier(0.2, 0, 0, 1);
+}
