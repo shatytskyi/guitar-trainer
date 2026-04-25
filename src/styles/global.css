@@ -475,39 +475,6 @@ button:focus-visible,
   text-align: center;
 }
 
-/* ─── Toast ─────────────────────────────── */
-.toast {
-  position: fixed;
-  left: 50%;
-  bottom: max(var(--space-5), env(safe-area-inset-bottom));
-  transform: translate(-50%, 24px);
-  opacity: 0;
-  background: var(--ink);
-  color: var(--on-accent);
-  border-radius: var(--radius-sm);
-  padding: var(--space-3) var(--space-4);
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  box-shadow: var(--shadow-2);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: var(--tracking-wide);
-  transition:
-    opacity var(--duration-base),
-    transform var(--duration-base) var(--ease-spring);
-  z-index: 100;
-}
-.toast--visible {
-  opacity: 1;
-  transform: translate(-50%, 0);
-}
-.toast__action {
-  background: transparent;
-  border-color: var(--on-accent);
-  color: var(--on-accent);
-}
-
 /* ─── Quiz toolbar/controls ─────────────── */
 .quiz-toolbar {
   display: flex;

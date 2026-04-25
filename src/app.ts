@@ -1,7 +1,6 @@
 import { createAppShell } from './shared/components/AppShell';
 import { createTopBar } from './shared/components/TopBar';
 import { createTabBar } from './shared/components/TabBar';
-import { showToast } from './shared/components/Toast';
 import { createSettingsStore, type Settings } from './shared/services/settings';
 import { createTranslator, type Dictionaries } from './shared/services/i18n';
 import ru from './shared/services/i18n/ru';
@@ -93,13 +92,7 @@ export function startApp(host: HTMLElement): void {
   if (!window.location.hash) window.location.hash = currentId();
   activate(currentId());
 
-  const pwa = registerPWA(() => {
-    showToast({
-      message: i18n.t('pwa.update.message'),
-      actionLabel: i18n.t('pwa.update.action'),
-      onAction() { void pwa.applyUpdate(); },
-    });
-  });
+  registerPWA();
 
   initInstallPrompt(i18n, settings);
 }

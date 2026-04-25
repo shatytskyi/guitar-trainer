@@ -33,9 +33,6 @@ const ru: Dictionary = {
   'chord.type.sus4': 'sus4',
   'chord.type.add9': 'add9',
 
-  'pwa.update.message': 'Доступно обновление',
-  'pwa.update.action': 'Обновить',
-
   'lang.ru': 'RU',
   'lang.en': 'EN',
   'lang.uk': 'UK',
