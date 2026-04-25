@@ -1,0 +1,19 @@
+import type { Translator } from '../services/i18n';
+import type { SettingsStore, ChordSet, Lang } from '../services/settings';
+import type { AudioOutput } from '../services/audio';
+
+export interface FeatureContext {
+  set: ChordSet;
+  lang: Lang;
+  audio: AudioOutput;
+  i18n: Translator;
+  settings: SettingsStore;
+}
+
+export interface Feature {
+  readonly id: string;
+  readonly titleKey: string;
+  mount(host: HTMLElement, ctx: FeatureContext): void;
+  unmount(): void;
+  onContextChange?(ctx: FeatureContext): void;
+}
