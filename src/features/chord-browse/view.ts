@@ -67,7 +67,6 @@ export function mountBrowseView(host: HTMLElement, deps: BrowseViewDeps): () => 
         onClick: () => {
           state = selectRoot(r);
           render();
-          play();
           scrollActiveRootIntoView();
         },
       }));
@@ -86,7 +85,7 @@ export function mountBrowseView(host: HTMLElement, deps: BrowseViewDeps): () => 
         label: t.type === '' ? '—' : t.type,
         variant: 'pill',
         active: i === state.typeIdx,
-        onClick: () => { state = selectType(state, i); render(); play(); },
+        onClick: () => { state = selectType(state, i); render(); },
       }));
     });
   }
@@ -119,8 +118,9 @@ export function mountBrowseView(host: HTMLElement, deps: BrowseViewDeps): () => 
       },
       {
         onTypeSelect: () => { /* no-op: managed by external rail */ },
-        onShapeSelect: id => { state = selectShape(state, Number(id)); paintStage(); play(); },
+        onShapeSelect: id => { state = selectShape(state, Number(id)); paintStage(); },
         onReveal: () => { /* never hidden in browse */ },
+        onDiagramActivate: () => play(),
       },
     );
   }

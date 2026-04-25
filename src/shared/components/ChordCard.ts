@@ -17,6 +17,7 @@ export interface ChordCardCallbacks {
   onTypeSelect: (id: string) => void;
   onShapeSelect: (id: string) => void;
   onReveal: () => void;
+  onDiagramActivate?: () => void;
 }
 
 export interface ChordCardHandle {
@@ -87,8 +88,10 @@ export function createChordCard(i18n: Translator): ChordCardHandle {
       if (data.hidden) {
         const overlay = createRevealOverlay({ i18n, onReveal: cb.onReveal });
         diagramWrap.appendChild(overlay);
+        setDiagramActivation(diagramWrap, undefined, i18n);
       } else {
         diagramWrap.innerHTML = renderFretboardDiagram(data.shape);
+        setDiagramActivation(diagramWrap, cb.onDiagramActivate, i18n);
       }
     },
   };
@@ -98,6 +101,41 @@ function el(tag: string, className: string): HTMLElement {
   const e = document.createElement(tag);
   e.className = className;
   return e;
+}
+
+function setDiagramActivation(
+  host: HTMLElement,
+  handler: (() => void) | undefined,
+  i18n: Translator,
+): void {
+  const existing = (host as HTMLElement & { __activate?: (e: Event) => void }).__activate;
+  if (existing) {
+    host.removeEventListener('click', existing);
+    host.removeEventListener('keydown', existing);
+    delete (host as HTMLElement & { __activate?: (e: Event) => void }).__activate;
+  }
+  if (!handler) {
+    host.classList.remove('chord-card__diagram--interactive');
+    host.removeAttribute('role');
+    host.removeAttribute('tabindex');
+    host.removeAttribute('aria-label');
+    return;
+  }
+  const onActivate = (e: Event) => {
+    if (e.type === 'keydown') {
+      const k = (e as KeyboardEvent).key;
+      if (k !== 'Enter' && k !== ' ') return;
+      e.preventDefault();
+    }
+    handler();
+  };
+  host.addEventListener('click', onActivate);
+  host.addEventListener('keydown', onActivate);
+  (host as HTMLElement & { __activate?: (e: Event) => void }).__activate = onActivate;
+  host.classList.add('chord-card__diagram--interactive');
+  host.setAttribute('role', 'button');
+  host.setAttribute('tabindex', '0');
+  host.setAttribute('aria-label', i18n.t('quiz.btn.play'));
 }
 
 const CHORD_NAME_RE = /^([A-G])(#)?(.*)$/;
