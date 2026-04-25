@@ -6,6 +6,7 @@ const en: Dictionary = {
 
   'set.basic': 'basic',
   'set.extended': '+ extended',
+  'set.all': 'all',
 
   'feature.chord-quiz.title': 'Quiz',
   'feature.chord-browse.title': 'Browse',
@@ -32,6 +33,16 @@ const en: Dictionary = {
   'chord.type.sus2': 'sus 2',
   'chord.type.sus4': 'sus 4',
   'chord.type.add9': 'add 9',
+  'chord.type.dim': 'diminished',
+  'chord.type.aug': 'augmented',
+  'chord.type.6': '6',
+  'chord.type.m6': 'minor 6',
+  'chord.type.dim7': 'dim 7',
+  'chord.type.m7b5': 'half-dim',
+  'chord.type.9': '9',
+  'chord.type.m9': 'minor 9',
+  'chord.type.maj9': 'maj 9',
+  'chord.type.13': '13',
 
   'lang.ru': 'RU',
   'lang.en': 'EN',

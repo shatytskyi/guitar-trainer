@@ -6,6 +6,7 @@ const uk: Dictionary = {
 
   'set.basic': 'базовий',
   'set.extended': '+ розшир.',
+  'set.all': 'усі',
 
   'feature.chord-quiz.title': 'Квіз',
   'feature.chord-browse.title': 'Усі акорди',
@@ -32,6 +33,16 @@ const uk: Dictionary = {
   'chord.type.sus2': 'sus2',
   'chord.type.sus4': 'sus4',
   'chord.type.add9': 'add9',
+  'chord.type.dim': 'dim',
+  'chord.type.aug': 'aug',
+  'chord.type.6': '6',
+  'chord.type.m6': 'm6',
+  'chord.type.dim7': 'dim7',
+  'chord.type.m7b5': 'm7♭5',
+  'chord.type.9': '9',
+  'chord.type.m9': 'm9',
+  'chord.type.maj9': 'maj9',
+  'chord.type.13': '13',
 
   'lang.ru': 'RU',
   'lang.en': 'EN',

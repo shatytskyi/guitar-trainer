@@ -2,6 +2,8 @@ import { PITCH_CLASSES, type PitchClass } from './note';
 
 export const CHORD_TYPES = [
   '', 'm', '7', 'maj7', 'm7', 'sus2', 'sus4', 'add9',
+  'dim', 'aug', '6', 'm6', 'dim7', 'm7b5',
+  '9', 'm9', 'maj9', '13',
 ] as const;
 
 export type ChordType = (typeof CHORD_TYPES)[number];

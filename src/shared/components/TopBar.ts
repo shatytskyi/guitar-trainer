@@ -45,7 +45,7 @@ export function createTopBar(opts: TopBarOptions): { root: HTMLElement; refresh(
     themeBtn.setAttribute('aria-pressed', String(theme === 'stage'));
 
     setSwitch.replaceChildren();
-    (['basic', 'extended'] as ChordSet[]).forEach(s => {
+    (['basic', 'extended', 'all'] as ChordSet[]).forEach(s => {
       const b = createButton({
         label: opts.i18n.t(`set.${s}`),
         variant: 'pill',
