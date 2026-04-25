@@ -11,11 +11,26 @@ import { audio } from './shared/services/audio';
 import { registerPWA } from './shared/services/pwa';
 import { features } from './features/registry';
 import type { Feature, FeatureContext } from './shared/lib/feature';
+import type { ThemeId } from './shared/services/settings';
+
+const THEME_COLORS: Record<ThemeId, string> = {
+  paper: '#e9e4d2',
+  stage: '#161914',
+};
+
+function applyTheme(theme: ThemeId): void {
+  document.documentElement.dataset['theme'] = theme;
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', THEME_COLORS[theme]);
+}
 
 export function startApp(host: HTMLElement): void {
   const dictionaries: Dictionaries = { ru, en, uk };
   const settings = createSettingsStore(window.localStorage);
   const i18n = createTranslator(dictionaries, settings.get().lang);
+
+  applyTheme(settings.get().theme);
+  settings.subscribe(s => applyTheme(s.theme));
 
   const shell = createAppShell();
   host.appendChild(shell.root);

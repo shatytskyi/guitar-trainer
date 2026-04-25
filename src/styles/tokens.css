@@ -1,57 +1,128 @@
 /*
- * Design tokens — PLACEHOLDER for v1.
- * This file is overwritten when Claude Design returns the design system.
- * All visual properties consumed by components MUST resolve here.
+ * Guitar Trainer — Design System v1 (Foliage)
+ * Direction: warm-paper + forest-green ink + ochre highlight.
+ * Dark mode opts in via [data-theme="stage"] on <html>.
+ * Source of truth — handoff from Claude Design.
  */
 :root {
-  /* Color (semantic) */
-  --surface-page: #f0e6d2;
-  --surface-raised: #e3d5b8;
-  --surface-overlay: rgba(92, 77, 58, 0.08);
+  /* ── Color (semantic) ───────────────────────── */
+  --paper:           #e9e4d2;
+  --paper-raised:    #ddd6bd;
+  --paper-sunken:    #d4cbac;
+  --paper-overlay:   rgba(34, 40, 32, 0.06);
 
-  --ink: #2a2520;
-  --ink-soft: #5c4d3a;
-  --on-accent: #f0e6d2;
+  --ink:             #222820;
+  --ink-soft:        #525a47;
+  --ink-mute:        #8a907d;
 
-  --accent: #b8442a;
-  --accent-soft: #d97757;
-  --gold: #a87f3c;
+  --on-accent:       #f3efde;
 
-  --border-soft: rgba(92, 77, 58, 0.3);
-  --shadow-1: 0 4px 20px rgba(42, 37, 32, 0.15);
-  --shadow-inset: inset 0 0 60px rgba(168, 127, 60, 0.05);
+  --accent:          #3f5a3a;
+  --accent-soft:     #5a7a52;
+  --accent-wash:     rgba(63, 90, 58, 0.08);
 
-  /* Typography */
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+  --gold:            #bb8a3e;
+  --gold-soft:       rgba(187, 138, 62, 0.18);
 
-  --text-xs: 9px;
-  --text-sm: 10px;
-  --text-md: 12px;
-  --text-lg: 15px;
-  --text-xl: 22px;
-  --text-2xl: clamp(20px, 5vw, 28px);
-  --text-3xl: clamp(40px, 11vw, 68px);
+  --danger:          #a64528;
+  --success:         #5a7a52;
 
-  --tracking-wide: 0.15em;
-  --tracking-wider: 0.18em;
+  --border-soft:     rgba(34, 40, 32, 0.18);
+  --border-strong:   rgba(34, 40, 32, 0.42);
+  --border-dashed:   rgba(82, 90, 71, 0.35);
 
-  /* Spacing (4-base) */
-  --space-1: 4px;
-  --space-2: 6px;
-  --space-3: 9px;
-  --space-4: 12px;
-  --space-5: 14px;
-  --space-6: 18px;
-  --space-7: 24px;
+  --shadow-1:        0 1px 2px rgba(34,40,32,0.06), 0 4px 18px rgba(34,40,32,0.10);
+  --shadow-2:        0 2px 4px rgba(34,40,32,0.08), 0 12px 32px rgba(34,40,32,0.14);
+  --shadow-inset:    inset 0 0 60px rgba(187, 138, 62, 0.05);
+  --shadow-pressed:  inset 0 1px 2px rgba(34,40,32,0.18);
 
-  /* Radius */
-  --radius-sm: 2px;
-  --radius-md: 4px;
-  --radius-pill: 9px;
+  /* Backwards-compatible aliases for legacy class refs. Prefer paper/* tokens. */
+  --surface-page:    var(--paper);
+  --surface-raised:  var(--paper-raised);
+  --surface-overlay: var(--paper-overlay);
 
-  /* Motion */
-  --duration-fast: 150ms;
-  --duration-base: 200ms;
-  --ease-default: cubic-bezier(0.2, 0, 0, 1);
+  /* ── Type ───────────────────────────────────── */
+  --font-display:    'Spectral', Georgia, 'Times New Roman', serif;
+  --font-mono:       'IBM Plex Mono', 'SF Mono', Menlo, Consolas, monospace;
+
+  --text-2xs:  10px;
+  --text-xs:   11px;
+  --text-sm:   13px;
+  --text-md:   15px;
+  --text-lg:   18px;
+  --text-xl:   24px;
+  --text-2xl:  clamp(22px, 5vw, 32px);
+  --text-3xl:  clamp(44px, 12vw, 76px);
+
+  --leading-tight: 1.05;
+  --leading-base:  1.4;
+  --leading-loose: 1.55;
+
+  --tracking-tight:  -0.03em;
+  --tracking-snug:   -0.01em;
+  --tracking-base:    0;
+  --tracking-wide:    0.12em;
+  --tracking-wider:   0.18em;
+  --tracking-widest:  0.24em;
+
+  /* ── Space (4-base) ─────────────────────────── */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  28px;
+  --space-7:  40px;
+  --space-8:  56px;
+
+  /* ── Radius ─────────────────────────────────── */
+  --radius-xs:   2px;
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-pill: 999px;
+
+  /* ── Motion ─────────────────────────────────── */
+  --duration-fast:  140ms;
+  --duration-base:  220ms;
+  --duration-slow:  360ms;
+  --ease-default:   cubic-bezier(0.2, 0, 0, 1);
+  --ease-spring:    cubic-bezier(0.5, 1.6, 0.4, 1);
+
+  /* ── Touch targets ──────────────────────────── */
+  --tap-target: 44px;
+
+  /* ── Paper texture ──────────────────────────── */
+  --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.85' numOctaves='2' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0.13 0 0 0 0 0.16 0 0 0 0 0.12 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Dark "stage" mode — opt in via [data-theme="stage"] on <html>. */
+[data-theme="stage"] {
+  --paper:           #161914;
+  --paper-raised:    #1f231c;
+  --paper-sunken:    #11130f;
+  --paper-overlay:   rgba(227, 224, 200, 0.05);
+
+  --ink:             #e3e0c8;
+  --ink-soft:        #a0a386;
+  --ink-mute:        #6c7060;
+
+  --on-accent:       #161914;
+
+  --accent:          #7ea073;
+  --accent-soft:     #9bb78f;
+  --accent-wash:     rgba(126, 160, 115, 0.10);
+
+  --gold:            #d6a958;
+  --gold-soft:       rgba(214, 169, 88, 0.20);
+
+  --danger:          #d97757;
+  --success:         #9bb78f;
+
+  --border-soft:     rgba(227, 224, 200, 0.12);
+  --border-strong:   rgba(227, 224, 200, 0.32);
+  --border-dashed:   rgba(160, 163, 134, 0.30);
+
+  --shadow-1:        0 1px 2px rgba(0,0,0,0.40), 0 4px 18px rgba(0,0,0,0.40);
+  --shadow-2:        0 2px 4px rgba(0,0,0,0.50), 0 12px 32px rgba(0,0,0,0.55);
+  --shadow-inset:    inset 0 0 60px rgba(214, 169, 88, 0.04);
 }

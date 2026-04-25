@@ -50,7 +50,7 @@ export function createChordCard(i18n: Translator): ChordCardHandle {
   return {
     root,
     render(data: ChordCardData, cb: ChordCardCallbacks) {
-      name.textContent = data.displayName;
+      paintChordName(name, data.displayName);
       meta.textContent = data.metaText;
 
       typeRow.style.display = data.types.length > 1 ? '' : 'none';
@@ -89,4 +89,30 @@ function el(tag: string, className: string): HTMLElement {
   const e = document.createElement(tag);
   e.className = className;
   return e;
+}
+
+const CHORD_NAME_RE = /^([A-G])(#)?(.*)$/;
+
+/** Render chord name with the design-system markup so the sharp and quality
+ *  pick up italic + accent styling. Falls back to plain text on bad input. */
+function paintChordName(host: HTMLElement, displayName: string): void {
+  host.replaceChildren();
+  const match = CHORD_NAME_RE.exec(displayName);
+  if (!match) {
+    host.textContent = displayName;
+    return;
+  }
+  const [, letter = '', sharp = '', quality = ''] = match;
+  host.append(document.createTextNode(letter));
+  if (sharp) {
+    const span = document.createElement('span');
+    span.className = 'chord-card__sharp';
+    span.textContent = '♯';
+    host.appendChild(span);
+  }
+  if (quality) {
+    const em = document.createElement('em');
+    em.textContent = quality;
+    host.appendChild(em);
+  }
 }

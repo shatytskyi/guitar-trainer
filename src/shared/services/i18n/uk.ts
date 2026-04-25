@@ -39,6 +39,10 @@ const uk: Dictionary = {
   'lang.ru': 'RU',
   'lang.en': 'EN',
   'lang.uk': 'UK',
+
+  'theme.toggle': 'перемкнути тему',
+  'theme.paper': 'світла',
+  'theme.stage': 'темна',
 };
 
 export default uk;

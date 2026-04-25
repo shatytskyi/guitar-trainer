@@ -39,6 +39,10 @@ const en: Dictionary = {
   'lang.ru': 'RU',
   'lang.en': 'EN',
   'lang.uk': 'UK',
+
+  'theme.toggle': 'toggle theme',
+  'theme.paper': 'light',
+  'theme.stage': 'dark',
 };
 
 export default en;

@@ -1,6 +1,6 @@
 import { createButton } from './Button';
 import type { Translator } from '../services/i18n';
-import type { Lang, ChordSet, SettingsStore } from '../services/settings';
+import type { Lang, ChordSet, SettingsStore, ThemeId } from '../services/settings';
 
 export interface TopBarOptions {
   i18n: Translator;
@@ -13,18 +13,36 @@ export function createTopBar(opts: TopBarOptions): { root: HTMLElement; refresh(
   const title = document.createElement('h1');
   title.className = 'topbar__title';
 
+  const cluster = document.createElement('div');
+  cluster.className = 'topbar__cluster';
+
+  const themeBtn = document.createElement('button');
+  themeBtn.type = 'button';
+  themeBtn.className = 'btn btn--icon topbar__theme';
+  themeBtn.addEventListener('click', () => {
+    const next: ThemeId = opts.settings.get().theme === 'stage' ? 'paper' : 'stage';
+    opts.settings.set({ theme: next });
+  });
+
   const setSwitch = document.createElement('div');
   setSwitch.className = 'topbar__switch';
 
   const langSwitch = document.createElement('div');
   langSwitch.className = 'topbar__switch';
 
-  root.append(title, setSwitch, langSwitch);
+  cluster.append(themeBtn, setSwitch, langSwitch);
+  root.append(title, cluster);
   build();
   return { root, refresh: build };
 
   function build() {
     title.innerHTML = `${escapeHtml(opts.i18n.t('app.title'))}<em>${escapeHtml(opts.i18n.t('app.title.suffix'))}</em>`;
+
+    const theme = opts.settings.get().theme;
+    themeBtn.textContent = theme === 'stage' ? '☼' : '☽';
+    themeBtn.setAttribute('aria-label', opts.i18n.t('theme.toggle'));
+    themeBtn.setAttribute('title', opts.i18n.t(`theme.${theme}`));
+    themeBtn.setAttribute('aria-pressed', String(theme === 'stage'));
 
     setSwitch.replaceChildren();
     (['basic', 'extended'] as ChordSet[]).forEach(s => {
