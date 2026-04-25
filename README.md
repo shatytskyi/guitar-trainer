@@ -8,7 +8,7 @@ UI in Russian, English, and Ukrainian. Chord notation is international (`A`, `Am
 
 ```bash
 npm install
-npm run dev      # http://localhost:5173/GuitarTrainer/
+npm run dev      # http://localhost:5173/guitar-trainer/
 ```
 
 ## Scripts
@@ -36,7 +36,7 @@ See `CLAUDE.md` for the architectural map and `docs/superpowers/specs/` for the 
 
 ## Deployment
 
-Push to `main`. The `Deploy to GitHub Pages` workflow runs typecheck + tests + build, then publishes `dist/` to Pages. The `base` in `vite.config.ts` is `/GuitarTrainer/` — change it if you fork to a different repo name.
+Push to `main`. The `Deploy to GitHub Pages` workflow runs typecheck + tests + build, then publishes `dist/` to Pages. The `base` in `vite.config.ts` is `/guitar-trainer/` — change it if you fork to a different repo name.
 
 ## Design system
 

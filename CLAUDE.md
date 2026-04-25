@@ -16,7 +16,7 @@ The user in this project relates to the work as a **product manager**, not a dev
 
 ```bash
 npm install        # once
-npm run dev        # Vite dev server on http://localhost:5173/GuitarTrainer/
+npm run dev        # Vite dev server on http://localhost:5173/guitar-trainer/
 npm run build      # type-check then build into dist/
 npm run preview    # serve dist/ locally
 npm run test       # Vitest single run
@@ -83,7 +83,7 @@ Tokens and components are sourced from Claude Design output (see `docs/design-br
 
 ## Deployment
 
-Vite `base` is `/GuitarTrainer/` so URLs resolve under the GitHub Pages path. `.github/workflows/deploy.yml` uses `actions/deploy-pages` and gates on typecheck + tests + build.
+Vite `base` is `/guitar-trainer/` so URLs resolve under the GitHub Pages path. `.github/workflows/deploy.yml` uses `actions/deploy-pages` and gates on typecheck + tests + build.
 
 ## What lives where (quick map)
 
