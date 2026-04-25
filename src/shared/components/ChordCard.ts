@@ -28,8 +28,10 @@ export function createChordCard(i18n: Translator): ChordCardHandle {
   const root = document.createElement('div');
   root.className = 'chord-card';
 
+  const header = el('div', 'chord-card__header');
   const name = el('div', 'chord-card__name');
   const meta = el('div', 'chord-card__meta');
+  header.append(name, meta);
 
   const typeRow = el('div', 'chord-card__row');
   const typeLabel = el('span', 'chord-card__row-label');
@@ -45,16 +47,22 @@ export function createChordCard(i18n: Translator): ChordCardHandle {
 
   const diagramWrap = el('div', 'chord-card__diagram');
 
-  root.append(name, meta, typeRow, shapeRow, diagramWrap);
+  root.append(header, typeRow, shapeRow, diagramWrap);
 
   return {
     root,
     render(data: ChordCardData, cb: ChordCardCallbacks) {
       paintChordName(name, data.displayName);
+      // The meta sub-line animates in via CSS (max-height + opacity).
+      // The header keeps a fixed min-height so the diagram below never
+      // moves; when meta is empty, the name centers alone in that space.
       meta.textContent = data.metaText;
-      meta.style.display = data.metaText ? '' : 'none';
+      meta.classList.toggle('chord-card__meta--shown', data.metaText !== '');
 
-      typeRow.style.display = data.types.length > 1 ? '' : 'none';
+      // Hide the row entirely when no options. In quiz the row is always
+      // populated; in browse data.types is always [] so the internal type
+      // row is permanently absent — both states are stable, no jumps.
+      typeRow.style.display = data.types.length > 0 ? '' : 'none';
       typeBtns.replaceChildren(...data.types.map(t =>
         createButton({
           label: t.label,
@@ -65,7 +73,7 @@ export function createChordCard(i18n: Translator): ChordCardHandle {
         }),
       ));
 
-      shapeRow.style.display = data.shapes.length > 1 ? '' : 'none';
+      shapeRow.style.display = data.shapes.length > 0 ? '' : 'none';
       shapeBtns.replaceChildren(...data.shapes.map(s =>
         createButton({
           label: s.label,

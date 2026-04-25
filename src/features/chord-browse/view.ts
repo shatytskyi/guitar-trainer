@@ -67,11 +67,10 @@ export function mountBrowseView(host: HTMLElement, deps: BrowseViewDeps): () => 
   function paintTypeRail() {
     typeRail.replaceChildren();
     const r = state.selectedRoot;
-    if (!r || r.types.length <= 1) {
-      typeRail.style.display = 'none';
-      return;
-    }
-    typeRail.style.display = '';
+    // Always keep the rail in layout so its appearance after the first
+    // root selection doesn't push the chord card up.
+    typeRail.style.visibility = r && r.types.length > 1 ? 'visible' : 'hidden';
+    if (!r || r.types.length <= 1) return;
     r.types.forEach((t, i) => {
       typeRail.appendChild(createButton({
         label: t.type === '' ? '—' : t.type,

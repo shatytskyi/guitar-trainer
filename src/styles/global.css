@@ -8,7 +8,7 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-html, body {
+html, body, #app {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-display);
@@ -319,6 +319,18 @@ button:focus-visible,
   min-height: 0;
   gap: var(--space-3);
 }
+/* Reserve enough room for "name + meta + gap" so the diagram below
+   never shifts. Visible items center inside this group, so when the
+   meta is missing the name appears optically centered instead of
+   floating above an empty line. */
+.chord-card__header {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(var(--text-3xl) * var(--leading-tight) + var(--text-xs) * 1.4 + var(--space-1));
+}
 .chord-card__name {
   font-family: var(--font-display);
   font-weight: 700;
@@ -345,10 +357,27 @@ button:focus-visible,
 .chord-card__meta {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
+  line-height: 1.4;
   letter-spacing: var(--tracking-wider);
   color: var(--ink-soft);
   text-transform: uppercase;
   text-align: center;
+  max-height: 0;
+  margin-top: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(-4px);
+  transition:
+    max-height var(--duration-base) var(--ease-default),
+    margin-top var(--duration-base) var(--ease-default),
+    opacity var(--duration-fast) ease-out,
+    transform var(--duration-base) var(--ease-default);
+}
+.chord-card__meta--shown {
+  max-height: 2em;
+  margin-top: var(--space-1);
+  opacity: 1;
+  transform: translateY(0);
 }
 .chord-card__row {
   display: flex;
@@ -360,6 +389,7 @@ button:focus-visible,
   overflow-y: visible;
   padding: 2px 0;
   scrollbar-width: none;
+  min-height: 32px;
 }
 .chord-card__row::-webkit-scrollbar { display: none; }
 .chord-card__row > * { flex-shrink: 0; }
@@ -548,6 +578,7 @@ button:focus-visible,
 .type-rail {
   align-items: center;
   justify-content: flex-start;
+  min-height: var(--tap-target);
 }
 .type-rail .btn--pill { flex-shrink: 0; }
 
