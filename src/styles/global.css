@@ -12,10 +12,13 @@ html, body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-display);
-  min-height: 100vh;
+  height: 100vh;
+  height: 100svh;
+  height: 100dvh;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
 }
 
 body {
@@ -170,9 +173,10 @@ button:focus-visible,
 .app-shell {
   max-width: 720px;
   margin: 0 auto;
-  padding: var(--space-4) var(--space-5) var(--space-5);
-  min-height: 100vh;
-  min-height: 100dvh;
+  padding:
+    max(var(--space-3), env(safe-area-inset-top)) 0
+    max(var(--space-3), env(safe-area-inset-bottom));
+  height: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -180,7 +184,8 @@ button:focus-visible,
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--space-4);
+  padding: 0 var(--space-5);
+  margin-bottom: var(--space-3);
   gap: var(--space-3);
   flex-wrap: wrap;
 }
@@ -188,21 +193,24 @@ button:focus-visible,
   display: flex;
   gap: var(--space-2);
   justify-content: center;
-  margin-bottom: var(--space-4);
+  padding: 0 var(--space-5);
+  margin-bottom: var(--space-3);
 }
 .app-shell__toolbar {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-3);
-  margin-bottom: var(--space-4);
+  padding: 0 var(--space-5);
+  margin-bottom: var(--space-3);
 }
 .app-shell__content {
   flex: 1;
   display: flex;
   flex-direction: column;
   min-height: 0;
-  overflow: hidden;
+  padding: 0 var(--space-5);
+  overflow: clip;
 }
 
 /* ─── Stage (hero surface) ──────────────── */
@@ -376,12 +384,15 @@ button:focus-visible,
   margin: var(--space-2) 0;
   min-height: 0;
   position: relative;
+  overflow: hidden;
 }
 .chord-card__diagram .fretboard-diagram {
+  display: block;
   width: 100%;
+  height: auto;
   max-width: 240px;
   max-height: 100%;
-  height: auto;
+  aspect-ratio: 5 / 6;
 }
 
 /* ─── RootTile ──────────────────────────── */
@@ -651,7 +662,7 @@ button:focus-visible,
   letter-spacing: var(--tracking-wider);
   color: var(--ink-mute);
   text-transform: uppercase;
-  padding: var(--space-3) 0 var(--space-2);
+  padding: var(--space-2) var(--space-5) 0;
   opacity: 0.55;
   user-select: none;
   flex-shrink: 0;
