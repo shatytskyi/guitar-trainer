@@ -17,7 +17,7 @@ const en: Dictionary = {
   'quiz.btn.play': '▶ Play',
   'quiz.btn.next': 'Next →',
 
-  'browse.empty': 'Pick a note from the grid above',
+  'browse.empty': 'Pick a note from the grid below',
 
   'shape.open': 'open',
   'shape.barre': 'barre',

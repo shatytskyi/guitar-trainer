@@ -135,6 +135,8 @@ export function mountBrowseView(host: HTMLElement, deps: BrowseViewDeps): () => 
 
   function scrollActiveRootIntoView() {
     const active = rootRail.querySelector<HTMLElement>('.root-tile--active');
-    active?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    if (!active) return;
+    const targetLeft = active.offsetLeft - (rootRail.clientWidth - active.offsetWidth) / 2;
+    rootRail.scrollTo({ left: targetLeft, behavior: 'smooth' });
   }
 }

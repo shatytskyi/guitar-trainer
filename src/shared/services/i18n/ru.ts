@@ -17,7 +17,7 @@ const ru: Dictionary = {
   'quiz.btn.play': '▶ Play',
   'quiz.btn.next': 'Следующий →',
 
-  'browse.empty': 'Выбери ноту из списка выше',
+  'browse.empty': 'Выбери ноту из списка ниже',
 
   'shape.open': 'откр.',
   'shape.barre': 'баррэ',

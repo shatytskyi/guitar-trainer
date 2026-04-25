@@ -17,7 +17,7 @@ const uk: Dictionary = {
   'quiz.btn.play': '▶ Play',
   'quiz.btn.next': 'Далі →',
 
-  'browse.empty': 'Обери ноту зі списку вище',
+  'browse.empty': 'Обери ноту зі списку нижче',
 
   'shape.open': 'відкр.',
   'shape.barre': 'баре',
