@@ -43,6 +43,12 @@ const en: Dictionary = {
   'theme.toggle': 'toggle theme',
   'theme.paper': 'light',
   'theme.stage': 'dark',
+
+  'install.title': 'Install the app',
+  'install.body': 'Add Guitar Trainer to your home screen — works offline.',
+  'install.ios-hint': 'Tap Share, then “Add to Home Screen”.',
+  'install.accept': 'Install',
+  'install.dismiss': 'Dismiss',
 };
 
 export default en;

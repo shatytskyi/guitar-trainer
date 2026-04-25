@@ -43,6 +43,12 @@ const ru: Dictionary = {
   'theme.toggle': 'переключить тему',
   'theme.paper': 'светлая',
   'theme.stage': 'тёмная',
+
+  'install.title': 'Установить приложение',
+  'install.body': 'Добавь Guitar Trainer на главный экран — работает без сети.',
+  'install.ios-hint': 'Нажми «Поделиться», затем «На экран „Домой“».',
+  'install.accept': 'Установить',
+  'install.dismiss': 'Закрыть',
 };
 
 export default ru;

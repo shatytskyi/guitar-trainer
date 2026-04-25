@@ -13,7 +13,9 @@ export function createAppShell(): AppShellSlots {
   const navSlot = el('div', 'app-shell__nav');
   const toolbarSlot = el('div', 'app-shell__toolbar');
   const contentSlot = el('div', 'app-shell__content');
-  root.append(topBarSlot, navSlot, toolbarSlot, contentSlot);
+  const version = el('div', 'app-version');
+  version.textContent = `v${__APP_VERSION__}`;
+  root.append(topBarSlot, navSlot, toolbarSlot, contentSlot, version);
   return { root, topBarSlot, navSlot, toolbarSlot, contentSlot };
 }
 

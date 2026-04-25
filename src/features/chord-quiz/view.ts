@@ -76,7 +76,7 @@ export function mountQuizView(host: HTMLElement, deps: QuizViewDeps): () => void
         metaText: type.type === '' ? '' : deps.i18n.t(`chord.type.${type.type}`),
         types: root.types.map((t, i) => ({
           id: String(i),
-          label: t.type === '' ? '—' : deps.i18n.t(`chord.type.${t.type}`),
+          label: t.type === '' ? '—' : t.type,
           active: i === state.typeIdx,
           highlight: i === state.originalTypeIdx && i !== state.typeIdx,
         })),

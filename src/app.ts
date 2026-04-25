@@ -9,6 +9,7 @@ import en from './shared/services/i18n/en';
 import uk from './shared/services/i18n/uk';
 import { audio } from './shared/services/audio';
 import { registerPWA } from './shared/services/pwa';
+import { initInstallPrompt } from './shared/services/install';
 import { features } from './features/registry';
 import type { Feature, FeatureContext } from './shared/lib/feature';
 import type { ThemeId } from './shared/services/settings';
@@ -92,11 +93,13 @@ export function startApp(host: HTMLElement): void {
   if (!window.location.hash) window.location.hash = currentId();
   activate(currentId());
 
-  registerPWA(() => {
+  const pwa = registerPWA(() => {
     showToast({
       message: i18n.t('pwa.update.message'),
       actionLabel: i18n.t('pwa.update.action'),
-      onAction() { window.location.reload(); },
+      onAction() { void pwa.applyUpdate(); },
     });
   });
+
+  initInstallPrompt(i18n, settings);
 }
