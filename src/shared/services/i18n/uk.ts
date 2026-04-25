@@ -11,8 +11,7 @@ const uk: Dictionary = {
   'feature.chord-quiz.title': 'Квіз',
   'feature.chord-browse.title': 'Усі акорди',
 
-  'quiz.label.type': 'тип:',
-  'quiz.label.shape': 'форма:',
+  'quiz.label.type': 'тип',
   'quiz.reveal': 'торкнись щоб побачити схему',
   'quiz.hide-diagram': 'ховати схему',
   'quiz.btn.play': '▶ Play',

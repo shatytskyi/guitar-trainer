@@ -11,8 +11,7 @@ const en: Dictionary = {
   'feature.chord-quiz.title': 'Quiz',
   'feature.chord-browse.title': 'Browse',
 
-  'quiz.label.type': 'type:',
-  'quiz.label.shape': 'shape:',
+  'quiz.label.type': 'type',
   'quiz.reveal': 'tap to reveal the diagram',
   'quiz.hide-diagram': 'hide diagram',
   'quiz.btn.play': '▶ Play',

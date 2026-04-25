@@ -35,20 +35,19 @@ export function createChordCard(i18n: Translator): ChordCardHandle {
   header.append(name, meta);
 
   const typeRow = el('div', 'chord-card__row');
-  const typeLabel = el('span', 'chord-card__row-label');
-  typeLabel.textContent = i18n.t('quiz.label.type');
   const typeBtns = el('div', 'chord-card__row-btns');
-  typeRow.append(typeLabel, typeBtns);
+  typeRow.append(typeBtns);
 
   const shapeRow = el('div', 'chord-card__row');
-  const shapeLabel = el('span', 'chord-card__row-label');
-  shapeLabel.textContent = i18n.t('quiz.label.shape');
   const shapeBtns = el('div', 'chord-card__row-btns');
-  shapeRow.append(shapeLabel, shapeBtns);
+  shapeRow.append(shapeBtns);
 
   const diagramWrap = el('div', 'chord-card__diagram');
 
   root.append(header, typeRow, shapeRow, diagramWrap);
+
+  let displayedHidden: boolean | undefined;
+  let cancelExit: (() => void) | null = null;
 
   return {
     root,
@@ -84,17 +83,73 @@ export function createChordCard(i18n: Translator): ChordCardHandle {
         }),
       ));
 
-      diagramWrap.replaceChildren();
-      if (data.hidden) {
-        const overlay = createRevealOverlay({ i18n, onReveal: cb.onReveal });
-        diagramWrap.appendChild(overlay);
-        setDiagramActivation(diagramWrap, undefined, i18n);
-      } else {
-        diagramWrap.innerHTML = renderFretboardDiagram(data.shape);
-        setDiagramActivation(diagramWrap, cb.onDiagramActivate, i18n);
+      const transitioning =
+        displayedHidden !== undefined &&
+        displayedHidden !== data.hidden &&
+        !prefersReducedMotion();
+      displayedHidden = data.hidden;
+      setDiagramActivation(diagramWrap, data.hidden ? undefined : cb.onDiagramActivate, i18n);
+
+      if (cancelExit) {
+        cancelExit();
+        cancelExit = null;
       }
+
+      const swapIn = () => {
+        const next = buildDiagramContent(data, cb, i18n);
+        next.classList.add('chord-card__diagram-content--enter');
+        next.addEventListener('animationend', () => {
+          next.classList.remove('chord-card__diagram-content--enter');
+        }, { once: true });
+        diagramWrap.replaceChildren(next);
+      };
+
+      if (!transitioning) {
+        diagramWrap.replaceChildren(buildDiagramContent(data, cb, i18n));
+        return;
+      }
+
+      const exiting = diagramWrap.firstElementChild as HTMLElement | null;
+      if (!exiting) {
+        swapIn();
+        return;
+      }
+
+      exiting.classList.remove('chord-card__diagram-content--enter');
+      exiting.classList.add('chord-card__diagram-content--exit');
+      const onEnd = () => {
+        exiting.removeEventListener('animationend', onEnd);
+        cancelExit = null;
+        swapIn();
+      };
+      exiting.addEventListener('animationend', onEnd);
+      cancelExit = () => {
+        exiting.removeEventListener('animationend', onEnd);
+        exiting.classList.remove('chord-card__diagram-content--exit');
+      };
     },
   };
+}
+
+function prefersReducedMotion(): boolean {
+  return typeof window !== 'undefined'
+    && typeof window.matchMedia === 'function'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function buildDiagramContent(
+  data: ChordCardData,
+  cb: ChordCardCallbacks,
+  i18n: Translator,
+): HTMLElement {
+  const wrap = document.createElement('div');
+  wrap.className = 'chord-card__diagram-content';
+  if (data.hidden) {
+    wrap.appendChild(createRevealOverlay({ i18n, onReveal: cb.onReveal }));
+  } else {
+    wrap.innerHTML = renderFretboardDiagram(data.shape);
+  }
+  return wrap;
 }
 
 function el(tag: string, className: string): HTMLElement {

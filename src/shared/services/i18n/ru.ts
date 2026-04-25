@@ -11,8 +11,7 @@ const ru: Dictionary = {
   'feature.chord-quiz.title': 'Квиз',
   'feature.chord-browse.title': 'Все аккорды',
 
-  'quiz.label.type': 'тип:',
-  'quiz.label.shape': 'форма:',
+  'quiz.label.type': 'тип',
   'quiz.reveal': 'нажми чтобы увидеть схему',
   'quiz.hide-diagram': 'скрывать схему',
   'quiz.btn.play': '▶ Play',

@@ -382,7 +382,7 @@ button:focus-visible,
 .chord-card__row {
   display: flex;
   gap: var(--space-2);
-  justify-content: center;
+  justify-content: safe center;
   align-items: center;
   flex-wrap: nowrap;
   overflow-x: auto;
@@ -393,14 +393,6 @@ button:focus-visible,
 }
 .chord-card__row::-webkit-scrollbar { display: none; }
 .chord-card__row > * { flex-shrink: 0; }
-.chord-card__row-label {
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  letter-spacing: var(--tracking-wider);
-  color: var(--ink-mute);
-  text-transform: uppercase;
-  margin-right: var(--space-2);
-}
 .chord-card__row-btns {
   display: flex;
   gap: var(--space-2);
@@ -415,6 +407,41 @@ button:focus-visible,
   min-height: 0;
   position: relative;
   overflow: hidden;
+}
+.chord-card__diagram-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  transform-origin: center;
+}
+.chord-card__diagram-content--enter {
+  animation: chord-card-diagram-enter var(--duration-base) var(--ease-default) both;
+}
+.chord-card__diagram-content--exit {
+  animation: chord-card-diagram-exit 160ms var(--ease-default) forwards;
+}
+@keyframes chord-card-diagram-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes chord-card-diagram-exit {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.94);
+  }
 }
 .chord-card__diagram .fretboard-diagram {
   display: block;

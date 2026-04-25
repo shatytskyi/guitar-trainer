@@ -41,17 +41,12 @@ export function mountQuizView(host: HTMLElement, deps: QuizViewDeps): () => void
 
   const controls = document.createElement('div');
   controls.className = 'quiz-controls';
-  const playBtn = createButton({
-    label: deps.i18n.t('quiz.btn.play'),
-    variant: 'primary',
-    onClick: () => playCurrent(),
-  });
   const nextBtn = createButton({
     label: deps.i18n.t('quiz.btn.next'),
-    variant: 'ghost',
+    variant: 'primary',
     onClick: () => { state = nextChord(state); render(); },
   });
-  controls.append(playBtn, nextBtn);
+  controls.append(nextBtn);
   stage.body.appendChild(controls);
 
   let state: QuizState = newState(deps.settings.get().set);
@@ -97,6 +92,7 @@ export function mountQuizView(host: HTMLElement, deps: QuizViewDeps): () => void
         },
         onShapeSelect: id => { state.shapeIdx = Number(id); render(); },
         onReveal: () => { state.revealed = true; render(); },
+        onDiagramActivate: () => playCurrent(),
       },
     );
   }
