@@ -62,7 +62,8 @@ export function mountQuizView(host: HTMLElement, deps: QuizViewDeps): () => void
   };
 
   function playCurrent() {
-    const shape = state.current.type.shapes[state.shapeIdx];
+    const type = state.current.root.types[state.typeIdx];
+    const shape = type?.shapes[state.shapeIdx];
     if (shape) void deps.audio.playNotes(shape.notes);
   }
 
