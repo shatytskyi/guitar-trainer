@@ -1,6 +1,5 @@
 export interface RootTileOptions {
   root: string;
-  typeLabels: readonly string[];
   active: boolean;
   onClick: () => void;
 }
@@ -23,12 +22,6 @@ export function createRootTile(opts: RootTileOptions): HTMLButtonElement {
   }
 
   btn.appendChild(nameDiv);
-  if (opts.typeLabels.length > 0) {
-    const typesDiv = document.createElement('div');
-    typesDiv.className = 'root-tile__types';
-    typesDiv.textContent = opts.typeLabels.join(' · ');
-    btn.appendChild(typesDiv);
-  }
   btn.addEventListener('click', opts.onClick);
   return btn;
 }

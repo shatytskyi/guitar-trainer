@@ -432,14 +432,6 @@ button:focus-visible,
   color: var(--accent);
   font-weight: 600;
 }
-.root-tile__types {
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  color: var(--ink-mute);
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  line-height: 1.4;
-}
 
 /* ─── RevealOverlay ─────────────────────── */
 .reveal-overlay {

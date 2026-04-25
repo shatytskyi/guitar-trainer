@@ -53,9 +53,6 @@ export function mountBrowseView(host: HTMLElement, deps: BrowseViewDeps): () => 
     for (const r of rootsForSet(deps.settings.get().set)) {
       rootRail.appendChild(createRootTile({
         root: r.root,
-        typeLabels: r.types
-          .filter(t => t.type !== '')
-          .map(t => t.type),
         active: r === state.selectedRoot,
         onClick: () => {
           state = selectRoot(r);
