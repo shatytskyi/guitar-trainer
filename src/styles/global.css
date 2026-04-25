@@ -7,6 +7,15 @@
 @import './tokens.css';
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
+*, *::before, *::after { -webkit-tap-highlight-color: transparent; }
+button,
+[role="button"],
+.root-tile,
+.toggle-switch {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
 
 html, body, #app {
   background: var(--paper);
