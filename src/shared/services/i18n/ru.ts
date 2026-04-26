@@ -11,14 +11,16 @@ const ru: Dictionary = {
   'feature.chord-quiz.title': 'Квиз',
   'feature.chord-loops.title': 'Смены',
   'feature.favorites.title': 'Избранное',
-  'feature.chord-browse.title': 'Все аккорды',
+  'feature.chord-browse.title': 'Схемы',
 
+  'quiz.set-label': 'Тренировать',
   'quiz.reveal': 'нажми чтобы увидеть схему',
   'quiz.hide-diagram': 'скрывать схему',
   'quiz.btn.play': '▶ Play',
   'quiz.btn.next': 'Следующий →',
   'quiz.empty-favorites': 'Добавь аккорды в избранное звездой, чтобы тренировать только их',
 
+  'browse.set-label': 'Показать',
   'browse.empty': 'Выбери ноту из списка ниже',
 
   'loops.select': 'Выбрать последовательность',
@@ -57,7 +59,7 @@ const ru: Dictionary = {
   'favorite.add': 'Добавить в избранное',
   'favorite.remove': 'Убрать из избранного',
   'favorites.empty.title': 'Пока нет избранных аккордов',
-  'favorites.empty.body': 'Открой квиз или список аккордов и нажми звезду рядом с названием.',
+  'favorites.empty.body': 'Открой квиз или схемы и нажми звезду рядом с названием.',
   'favorites.play': 'Проиграть {chord}',
 
   'shape.open': 'откр.',

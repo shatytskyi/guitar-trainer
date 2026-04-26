@@ -1,6 +1,5 @@
-import { createButton } from './Button';
 import type { Translator } from '../services/i18n';
-import type { Lang, ChordSet, SettingsStore, ThemeId } from '../services/settings';
+import type { Lang, SettingsStore, ThemeId } from '../services/settings';
 
 const APP_TITLE_SUFFIX = '.';
 
@@ -26,9 +25,6 @@ export function createTopBar(opts: TopBarOptions): { root: HTMLElement; refresh(
     opts.settings.set({ theme: next });
   });
 
-  const setSwitch = document.createElement('div');
-  setSwitch.className = 'topbar__switch';
-
   const langSelect = document.createElement('select');
   langSelect.className = 'topbar__select';
   langSelect.addEventListener('change', () => {
@@ -36,7 +32,7 @@ export function createTopBar(opts: TopBarOptions): { root: HTMLElement; refresh(
     if (isLang(next)) opts.settings.set({ lang: next });
   });
 
-  cluster.append(setSwitch, themeBtn, langSelect);
+  cluster.append(themeBtn, langSelect);
   root.append(title, cluster);
   build();
   return { root, refresh: build };
@@ -49,17 +45,6 @@ export function createTopBar(opts: TopBarOptions): { root: HTMLElement; refresh(
     themeBtn.setAttribute('aria-label', opts.i18n.t('theme.toggle'));
     themeBtn.setAttribute('title', opts.i18n.t(`theme.${theme}`));
     themeBtn.setAttribute('aria-pressed', String(theme === 'stage'));
-
-    setSwitch.replaceChildren();
-    (['basic', 'extended', 'all', 'favorites'] as ChordSet[]).forEach(s => {
-      const b = createButton({
-        label: opts.i18n.t(`set.${s}`),
-        variant: 'pill',
-        active: opts.settings.get().set === s,
-        onClick: () => opts.settings.set({ set: s }),
-      });
-      setSwitch.appendChild(b);
-    });
 
     langSelect.setAttribute('aria-label', opts.i18n.t('lang.select'));
     langSelect.setAttribute('title', opts.i18n.t('lang.select'));

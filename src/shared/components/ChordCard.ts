@@ -11,6 +11,7 @@ export interface ChordCardData {
   shapes: ReadonlyArray<{ id: string; label: string; active: boolean }>;
   shape: ChordShape;
   hidden: boolean;
+  diagramToggle?: { checked: boolean; label: string };
   favorite?: { active: boolean; label: string };
 }
 
@@ -19,6 +20,7 @@ export interface ChordCardCallbacks {
   onShapeSelect: (id: string) => void;
   onReveal: () => void;
   onDiagramActivate?: () => void;
+  onDiagramToggle?: (checked: boolean) => void;
   onFavoriteToggle?: () => void;
 }
 
@@ -49,9 +51,18 @@ export function createChordCard(i18n: Translator): ChordCardHandle {
   const shapeBtns = el('div', 'chord-card__row-btns');
   shapeRow.append(shapeBtns);
 
+  const diagramSettings = el('div', 'chord-card__diagram-settings');
+  const diagramSettingsLabel = document.createElement('span');
+  diagramSettingsLabel.className = 'chord-card__diagram-settings-label';
+  const diagramToggle = document.createElement('button');
+  diagramToggle.type = 'button';
+  diagramToggle.className = 'toggle-switch chord-card__diagram-toggle';
+  diagramToggle.setAttribute('role', 'switch');
+  diagramSettings.append(diagramSettingsLabel, diagramToggle);
+
   const diagramWrap = el('div', 'chord-card__diagram');
 
-  root.append(header, typeRow, shapeRow, diagramWrap);
+  root.append(header, typeRow, shapeRow, diagramSettings, diagramWrap);
 
   let displayedHidden: boolean | undefined;
   let cancelExit: (() => void) | null = null;
@@ -91,6 +102,8 @@ export function createChordCard(i18n: Translator): ChordCardHandle {
         }),
       ));
       restoreFocusedOption(root, focusedOption);
+
+      paintDiagramToggle(diagramSettings, diagramSettingsLabel, diagramToggle, data, cb);
 
       const transitioning =
         displayedHidden !== undefined &&
@@ -138,6 +151,31 @@ export function createChordCard(i18n: Translator): ChordCardHandle {
       };
     },
   };
+}
+
+function paintDiagramToggle(
+  row: HTMLElement,
+  label: HTMLElement,
+  toggle: HTMLButtonElement,
+  data: ChordCardData,
+  cb: ChordCardCallbacks,
+): void {
+  if (!data.diagramToggle || !cb.onDiagramToggle) {
+    row.hidden = true;
+    toggle.onclick = null;
+    toggle.removeAttribute('aria-label');
+    toggle.removeAttribute('aria-checked');
+    toggle.classList.remove('toggle-switch--on');
+    return;
+  }
+
+  const checked = data.diagramToggle.checked;
+  row.hidden = false;
+  label.textContent = data.diagramToggle.label;
+  toggle.classList.toggle('toggle-switch--on', checked);
+  toggle.setAttribute('aria-label', data.diagramToggle.label);
+  toggle.setAttribute('aria-checked', String(checked));
+  toggle.onclick = () => cb.onDiagramToggle?.(!checked);
 }
 
 function paintFavoriteButton(

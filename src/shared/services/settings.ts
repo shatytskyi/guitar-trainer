@@ -6,7 +6,8 @@ export type ThemeId = 'paper' | 'stage';
 
 export interface Settings {
   lang: Lang;
-  set: ChordSet;
+  quizChordSet: ChordSet;
+  browseChordSet: ChordSet;
   hideDiagram: boolean;
   theme: ThemeId;
   lastFeatureId: string;
@@ -14,7 +15,8 @@ export interface Settings {
 
 export const DEFAULT_SETTINGS: Settings = {
   lang: 'ru',
-  set: 'basic',
+  quizChordSet: 'basic',
+  browseChordSet: 'all',
   hideDiagram: true,
   theme: 'paper',
   lastFeatureId: 'chord-quiz',
@@ -49,21 +51,49 @@ function load(storage: Storage): Settings {
   if (!raw) return { ...DEFAULT_SETTINGS };
   try {
     const parsed: unknown = JSON.parse(raw);
-    if (!isSettings(parsed)) return { ...DEFAULT_SETTINGS };
-    return parsed;
+    return normalizeSettings(parsed) ?? { ...DEFAULT_SETTINGS };
   } catch {
     return { ...DEFAULT_SETTINGS };
   }
 }
 
-function isSettings(v: unknown): v is Settings {
-  if (typeof v !== 'object' || v === null) return false;
+function normalizeSettings(v: unknown): Settings | null {
+  if (typeof v !== 'object' || v === null) return null;
   const r = v as Record<string, unknown>;
-  return (
-    (r['lang'] === 'ru' || r['lang'] === 'en' || r['lang'] === 'uk') &&
-    (r['set'] === 'basic' || r['set'] === 'extended' || r['set'] === 'all' || r['set'] === 'favorites') &&
-    typeof r['hideDiagram'] === 'boolean' &&
-    (r['theme'] === 'paper' || r['theme'] === 'stage') &&
-    typeof r['lastFeatureId'] === 'string'
-  );
+  const lang = readLang(r['lang']);
+  const legacySet = readChordSet(r['set']);
+  const quizChordSet = readChordSet(r['quizChordSet']) ?? legacySet;
+  const browseChordSet = readChordSet(r['browseChordSet']) ?? legacySet;
+  const theme = readTheme(r['theme']);
+  if (
+    !lang ||
+    !quizChordSet ||
+    !browseChordSet ||
+    typeof r['hideDiagram'] !== 'boolean' ||
+    !theme ||
+    typeof r['lastFeatureId'] !== 'string'
+  ) {
+    return null;
+  }
+
+  return {
+    lang,
+    quizChordSet,
+    browseChordSet,
+    hideDiagram: r['hideDiagram'],
+    theme,
+    lastFeatureId: r['lastFeatureId'],
+  };
+}
+
+function readLang(v: unknown): Lang | null {
+  return v === 'ru' || v === 'en' || v === 'uk' ? v : null;
+}
+
+function readChordSet(v: unknown): ChordSet | null {
+  return v === 'basic' || v === 'extended' || v === 'all' || v === 'favorites' ? v : null;
+}
+
+function readTheme(v: unknown): ThemeId | null {
+  return v === 'paper' || v === 'stage' ? v : null;
 }

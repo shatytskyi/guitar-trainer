@@ -11,14 +11,16 @@ const en: Dictionary = {
   'feature.chord-quiz.title': 'Quiz',
   'feature.chord-loops.title': 'Changes',
   'feature.favorites.title': 'Favorites',
-  'feature.chord-browse.title': 'Browse',
+  'feature.chord-browse.title': 'Diagrams',
 
+  'quiz.set-label': 'Train',
   'quiz.reveal': 'tap to reveal the diagram',
   'quiz.hide-diagram': 'hide diagram',
   'quiz.btn.play': '▶ Play',
   'quiz.btn.next': 'Next →',
   'quiz.empty-favorites': 'Star chords first to train favorites only',
 
+  'browse.set-label': 'Show',
   'browse.empty': 'Pick a note from the grid below',
 
   'loops.select': 'Select chord loop',
@@ -57,7 +59,7 @@ const en: Dictionary = {
   'favorite.add': 'Add to favorites',
   'favorite.remove': 'Remove from favorites',
   'favorites.empty.title': 'No favorite chords yet',
-  'favorites.empty.body': 'Open the quiz or chord list and tap the star next to a chord name.',
+  'favorites.empty.body': 'Open the quiz or diagrams and tap the star next to a chord name.',
   'favorites.play': 'Play {chord}',
 
   'shape.open': 'open',

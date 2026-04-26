@@ -56,7 +56,7 @@ export function startApp(host: HTMLElement): void {
 
   function ctx(): FeatureContext {
     const s = settings.get();
-    return { set: s.set, lang: s.lang, audio, i18n, settings, favorites };
+    return { lang: s.lang, audio, i18n, settings, favorites };
   }
 
   function currentId(): string {

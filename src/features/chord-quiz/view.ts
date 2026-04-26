@@ -1,7 +1,7 @@
 import { createStage } from '../../shared/components/Stage';
 import { createChordCard } from '../../shared/components/ChordCard';
+import { createChordSetSelector } from '../../shared/components/ChordSetSelector';
 import { createButton } from '../../shared/components/Button';
-import { createToggleSwitch } from '../../shared/components/ToggleSwitch';
 import { chordDisplayName } from '../../shared/lib/chord';
 import { favoriteIdForShape } from '../../shared/lib/favorites';
 import { getDefaultShapeIdx } from '../../shared/lib/music';
@@ -27,25 +27,27 @@ export interface QuizViewHandle {
 
 export function mountQuizView(host: HTMLElement, initialDeps: QuizViewDeps): QuizViewHandle {
   let deps = initialDeps;
-  let state: QuizState = newState(deps.settings.get().set, deps.favorites.get());
+  let state: QuizState = newState(deps.settings.get().quizChordSet, deps.favorites.get());
 
   const toolbar = document.createElement('div');
   toolbar.className = 'quiz-toolbar';
-  const toolbarLabel = document.createElement('label');
-  toolbarLabel.className = 'quiz-toolbar__label';
-  toolbarLabel.htmlFor = 'quiz-hide-diagram-toggle';
-  toolbarLabel.textContent = deps.i18n.t('quiz.hide-diagram');
-  const toggle = createToggleSwitch({
-    initial: deps.settings.get().hideDiagram,
-    ariaLabel: deps.i18n.t('quiz.hide-diagram'),
-    onChange: v => {
-      deps.settings.set({ hideDiagram: v });
-      state.revealed = false;
-      render();
+
+  const setGroup = document.createElement('div');
+  setGroup.className = 'quiz-toolbar__group';
+  const setLabel = document.createElement('span');
+  setLabel.className = 'quiz-toolbar__caption';
+  setLabel.textContent = deps.i18n.t('quiz.set-label');
+  const setSelector = createChordSetSelector({
+    i18n: deps.i18n,
+    value: deps.settings.get().quizChordSet,
+    ariaLabel: deps.i18n.t('quiz.set-label'),
+    onSelect: set => {
+      deps.settings.set({ quizChordSet: set });
     },
   });
-  toggle.el.id = toolbarLabel.htmlFor;
-  toolbar.append(toolbarLabel, toggle.el);
+  setGroup.append(setLabel, setSelector.root);
+
+  toolbar.append(setGroup);
   host.appendChild(toolbar);
 
   const stage = createStage();
@@ -76,11 +78,17 @@ export function mountQuizView(host: HTMLElement, initialDeps: QuizViewDeps): Qui
     },
     refresh(nextDeps) {
       deps = nextDeps;
-      state = syncQuizSet(state, deps.settings.get().set, deps.favorites.get());
-      const hideDiagramLabel = deps.i18n.t('quiz.hide-diagram');
-      toolbarLabel.textContent = hideDiagramLabel;
-      toggle.el.setAttribute('aria-label', hideDiagramLabel);
-      toggle.set(deps.settings.get().hideDiagram);
+      state = syncQuizSet(state, deps.settings.get().quizChordSet, deps.favorites.get());
+      const setLabelText = deps.i18n.t('quiz.set-label');
+      setLabel.textContent = setLabelText;
+      setSelector.render({
+        i18n: deps.i18n,
+        value: deps.settings.get().quizChordSet,
+        ariaLabel: setLabelText,
+        onSelect: set => {
+          deps.settings.set({ quizChordSet: set });
+        },
+      });
       nextBtn.textContent = deps.i18n.t('quiz.btn.next');
       render();
     },
@@ -126,6 +134,10 @@ export function mountQuizView(host: HTMLElement, initialDeps: QuizViewDeps): Qui
         })),
         shape,
         hidden: deps.settings.get().hideDiagram && !state.revealed,
+        diagramToggle: {
+          checked: deps.settings.get().hideDiagram,
+          label: deps.i18n.t('quiz.hide-diagram'),
+        },
         favorite: {
           active: favoriteActive,
           label: deps.i18n.t(favoriteActive ? 'favorite.remove' : 'favorite.add'),
@@ -140,6 +152,11 @@ export function mountQuizView(host: HTMLElement, initialDeps: QuizViewDeps): Qui
         onShapeSelect: id => { state.shapeIdx = Number(id); render(); },
         onReveal: () => { state.revealed = true; render(); },
         onDiagramActivate: () => playCurrent(),
+        onDiagramToggle: checked => {
+          deps.settings.set({ hideDiagram: checked });
+          state.revealed = false;
+          render();
+        },
         onFavoriteToggle: () => {
           deps.favorites.toggle(favoriteId);
           render();

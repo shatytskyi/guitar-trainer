@@ -1,10 +1,9 @@
 import type { Translator } from '../services/i18n';
-import type { SettingsStore, ChordSet, Lang } from '../services/settings';
+import type { SettingsStore, Lang } from '../services/settings';
 import type { AudioOutput } from '../services/audio';
 import type { FavoritesStore } from '../services/favorites';
 
 export interface FeatureContext {
-  set: ChordSet;
   lang: Lang;
   audio: AudioOutput;
   i18n: Translator;

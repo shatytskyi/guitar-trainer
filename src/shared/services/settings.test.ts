@@ -24,18 +24,37 @@ describe('settings store', () => {
     const store = createSettingsStore(backing as unknown as Storage);
     store.set({ lang: 'uk' });
     expect(store.get().lang).toBe('uk');
-    expect(store.get().set).toBe(DEFAULT_SETTINGS.set);
+    expect(store.get().quizChordSet).toBe(DEFAULT_SETTINGS.quizChordSet);
+    expect(store.get().browseChordSet).toBe(DEFAULT_SETTINGS.browseChordSet);
   });
 
   it('hydrates from existing storage', () => {
     backing.setItem(
       'guitar-trainer.settings.v1',
-      JSON.stringify({ lang: 'en', set: 'favorites', hideDiagram: false, theme: 'paper', lastFeatureId: 'favorites' }),
+      JSON.stringify({
+        lang: 'en',
+        quizChordSet: 'favorites',
+        browseChordSet: 'extended',
+        hideDiagram: false,
+        theme: 'paper',
+        lastFeatureId: 'favorites',
+      }),
     );
     const store = createSettingsStore(backing as unknown as Storage);
     expect(store.get().lang).toBe('en');
-    expect(store.get().set).toBe('favorites');
+    expect(store.get().quizChordSet).toBe('favorites');
+    expect(store.get().browseChordSet).toBe('extended');
     expect(store.get().hideDiagram).toBe(false);
+  });
+
+  it('migrates the legacy global chord set into feature-local sets', () => {
+    backing.setItem(
+      'guitar-trainer.settings.v1',
+      JSON.stringify({ lang: 'en', set: 'favorites', hideDiagram: false, theme: 'paper', lastFeatureId: 'favorites' }),
+    );
+    const store = createSettingsStore(backing as unknown as Storage);
+    expect(store.get().quizChordSet).toBe('favorites');
+    expect(store.get().browseChordSet).toBe('favorites');
   });
 
   it('falls back to defaults when storage is malformed', () => {

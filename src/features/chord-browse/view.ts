@@ -1,6 +1,7 @@
 import { createRootTile } from '../../shared/components/RootTile';
 import { createStage } from '../../shared/components/Stage';
 import { createChordCard, type ChordCardHandle } from '../../shared/components/ChordCard';
+import { createChordSetSelector } from '../../shared/components/ChordSetSelector';
 import { chordDisplayName } from '../../shared/lib/chord';
 import { favoriteIdForShape } from '../../shared/lib/favorites';
 import { rootsForSet } from '../../data/sets';
@@ -26,11 +27,27 @@ export interface BrowseViewHandle {
 
 export function mountBrowseView(host: HTMLElement, initialDeps: BrowseViewDeps): BrowseViewHandle {
   let deps = initialDeps;
-  let activeSet: ChordSet = deps.settings.get().set;
+  let activeSet: ChordSet = deps.settings.get().browseChordSet;
 
   const root = document.createElement('div');
   root.className = 'browse';
   host.appendChild(root);
+
+  const toolbar = document.createElement('div');
+  toolbar.className = 'browse-toolbar';
+  const setLabel = document.createElement('span');
+  setLabel.className = 'browse-toolbar__label';
+  setLabel.textContent = deps.i18n.t('browse.set-label');
+  const setSelector = createChordSetSelector({
+    i18n: deps.i18n,
+    value: deps.settings.get().browseChordSet,
+    ariaLabel: deps.i18n.t('browse.set-label'),
+    onSelect: set => {
+      deps.settings.set({ browseChordSet: set });
+    },
+  });
+  toolbar.append(setLabel, setSelector.root);
+  root.appendChild(toolbar);
 
   const stageWrap = document.createElement('div');
   stageWrap.className = 'browse__stage';
@@ -68,6 +85,16 @@ export function mountBrowseView(host: HTMLElement, initialDeps: BrowseViewDeps):
       deps = nextDeps;
       syncSet();
       empty.textContent = deps.i18n.t('browse.empty');
+      const setLabelText = deps.i18n.t('browse.set-label');
+      setLabel.textContent = setLabelText;
+      setSelector.render({
+        i18n: deps.i18n,
+        value: deps.settings.get().browseChordSet,
+        ariaLabel: setLabelText,
+        onSelect: set => {
+          deps.settings.set({ browseChordSet: set });
+        },
+      });
       rootRail.setAttribute('aria-label', deps.i18n.t('feature.chord-browse.title'));
       render();
     },
@@ -79,7 +106,7 @@ export function mountBrowseView(host: HTMLElement, initialDeps: BrowseViewDeps):
   }
 
   function syncSet() {
-    const nextSet = deps.settings.get().set;
+    const nextSet = deps.settings.get().browseChordSet;
     if (activeSet === nextSet && nextSet !== 'favorites') return;
     activeSet = nextSet;
     state = syncBrowseSet(state, rootsForSet(nextSet, deps.favorites.get()));
@@ -87,7 +114,7 @@ export function mountBrowseView(host: HTMLElement, initialDeps: BrowseViewDeps):
 
   function paintRootRail() {
     rootRail.replaceChildren();
-    const roots = rootsForSet(deps.settings.get().set, deps.favorites.get());
+    const roots = rootsForSet(deps.settings.get().browseChordSet, deps.favorites.get());
     roots.forEach((r, idx) => {
       const active = r === state.selectedRoot;
       rootRail.appendChild(createRootTile({
