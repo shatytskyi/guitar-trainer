@@ -4,7 +4,7 @@ export const CHORDS_BASIC: readonly RootEntry[] = [
   { root: 'C', types: [
     { type: '', shapes: [
       { label: 'open',  frets: [null, 3, 2, 0, 1, 0], fingers: [null, 3, 2, null, 1, null], notes: ['C3','E3','G3','C4','E4'] },
-      { label: 'barre', frets: [null, 3, 5, 5, 5, 3], fingers: [null, 1, 2, 3, 4, 1],         notes: ['C3','G3','C4','E4','C5'] },
+      { label: 'barre', frets: [null, 3, 5, 5, 5, 3], fingers: [null, 1, 2, 3, 4, 1],         notes: ['C3','G3','C4','E4','G4'] },
     ] },
     { type: 'add9', shapes: [
       { label: 'open', frets: [null, 3, 2, 0, 3, 0], fingers: [null, 2, 1, null, 3, null], notes: ['C3','E3','G3','D4','E4'] },

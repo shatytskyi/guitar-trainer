@@ -7,7 +7,9 @@ import { getDefaultShapeIdx } from '../../shared/lib/music';
 import type { Translator } from '../../shared/services/i18n';
 import type { AudioOutput } from '../../shared/services/audio';
 import type { SettingsStore } from '../../shared/services/settings';
-import { newState, nextChord, type QuizState } from './state';
+import { newState, nextChord, syncQuizSet, type QuizState } from './state';
+
+const RECOMMENDED_MARK = '★';
 
 export interface QuizViewDeps {
   i18n: Translator;
@@ -15,11 +17,20 @@ export interface QuizViewDeps {
   settings: SettingsStore;
 }
 
-export function mountQuizView(host: HTMLElement, deps: QuizViewDeps): () => void {
+export interface QuizViewHandle {
+  destroy(): void;
+  refresh(deps: QuizViewDeps): void;
+}
+
+export function mountQuizView(host: HTMLElement, initialDeps: QuizViewDeps): QuizViewHandle {
+  let deps = initialDeps;
+  let state: QuizState = newState(deps.settings.get().set);
+
   const toolbar = document.createElement('div');
   toolbar.className = 'quiz-toolbar';
-  const toolbarLabel = document.createElement('span');
+  const toolbarLabel = document.createElement('label');
   toolbarLabel.className = 'quiz-toolbar__label';
+  toolbarLabel.htmlFor = 'quiz-hide-diagram-toggle';
   toolbarLabel.textContent = deps.i18n.t('quiz.hide-diagram');
   const toggle = createToggleSwitch({
     initial: deps.settings.get().hideDiagram,
@@ -30,6 +41,7 @@ export function mountQuizView(host: HTMLElement, deps: QuizViewDeps): () => void
       render();
     },
   });
+  toggle.el.id = toolbarLabel.htmlFor;
   toolbar.append(toolbarLabel, toggle.el);
   host.appendChild(toolbar);
 
@@ -50,11 +62,22 @@ export function mountQuizView(host: HTMLElement, deps: QuizViewDeps): () => void
   controls.append(nextBtn);
   host.appendChild(controls);
 
-  let state: QuizState = newState(deps.settings.get().set);
   render();
 
-  return () => {
-    host.replaceChildren();
+  return {
+    destroy() {
+      host.replaceChildren();
+    },
+    refresh(nextDeps) {
+      deps = nextDeps;
+      state = syncQuizSet(state, deps.settings.get().set);
+      const hideDiagramLabel = deps.i18n.t('quiz.hide-diagram');
+      toolbarLabel.textContent = hideDiagramLabel;
+      toggle.el.setAttribute('aria-label', hideDiagramLabel);
+      toggle.set(deps.settings.get().hideDiagram);
+      nextBtn.textContent = deps.i18n.t('quiz.btn.next');
+      render();
+    },
   };
 
   function playCurrent() {
@@ -79,7 +102,7 @@ export function mountQuizView(host: HTMLElement, deps: QuizViewDeps): () => void
         })),
         shapes: type.shapes.map((s, i) => ({
           id: String(i),
-          label: deps.i18n.t(`shape.${s.label}`) + (s.recommended ? ' ' + deps.i18n.t('shape.recommended') : ''),
+          label: deps.i18n.t(`shape.${s.label}`) + (s.recommended ? ` ${RECOMMENDED_MARK}` : ''),
           active: i === state.shapeIdx,
         })),
         shape,

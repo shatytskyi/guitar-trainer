@@ -4,12 +4,12 @@ export const CHORDS_EXTENDED: readonly RootEntry[] = [
   { root: 'C', types: [
     { type: '',     shapes: [
       { label: 'open',  frets: [null, 3, 2, 0, 1, 0], fingers: [null, 3, 2, null, 1, null], notes: ['C3','E3','G3','C4','E4'] },
-      { label: 'barre', frets: [null, 3, 5, 5, 5, 3], fingers: [null, 1, 2, 3, 4, 1],         notes: ['C3','G3','C4','E4','C5'] },
+      { label: 'barre', frets: [null, 3, 5, 5, 5, 3], fingers: [null, 1, 2, 3, 4, 1],         notes: ['C3','G3','C4','E4','G4'] },
     ] },
     { type: 'm',    shapes: [{ label: 'barre', frets: [null, 3, 5, 5, 4, 3], fingers: [null, 1, 3, 4, 2, 1], notes: ['C3','G3','C4','D#4','G4'] }] },
     { type: '7',    shapes: [{ label: 'open',  frets: [null, 3, 2, 3, 1, 0], fingers: [null, 3, 2, 4, 1, null], notes: ['C3','E3','A#3','C4','E4'] }] },
     { type: 'maj7', shapes: [{ label: 'open',  frets: [null, 3, 2, 0, 0, 0], fingers: [null, 3, 2, null, null, null], notes: ['C3','E3','G3','B3','E4'] }] },
-    { type: 'sus2', shapes: [{ label: 'open',  frets: [null, 3, 0, 0, 1, 3], fingers: [null, 3, null, null, 1, 4], notes: ['C3','D3','G3','C4','D4'] }] },
+    { type: 'sus2', shapes: [{ label: 'open',  frets: [null, 3, 0, 0, 1, 3], fingers: [null, 3, null, null, 1, 4], notes: ['C3','D3','G3','C4','G4'] }] },
     { type: 'add9', shapes: [{ label: 'open',  frets: [null, 3, 2, 0, 3, 0], fingers: [null, 2, 1, null, 3, null], notes: ['C3','E3','G3','D4','E4'] }] },
   ] },
   { root: 'D', types: [
@@ -32,7 +32,7 @@ export const CHORDS_EXTENDED: readonly RootEntry[] = [
     { type: 'm',    shapes: [{ label: 'open', frets: [0, 2, 2, 0, 0, 0], fingers: [null, 2, 3, null, null, null], notes: ['E2','B2','E3','G3','B3','E4'] }] },
     { type: '7',    shapes: [{ label: 'open', frets: [0, 2, 0, 1, 0, 0], fingers: [null, 2, null, 1, null, null], notes: ['E2','B2','D3','G#3','B3','E4'] }] },
     { type: 'maj7', shapes: [{ label: 'open', frets: [0, 2, 1, 1, 0, 0], fingers: [null, 3, 1, 2, null, null], notes: ['E2','B2','D#3','G#3','B3','E4'] }] },
-    { type: 'm7',   shapes: [{ label: 'open', frets: [0, 2, 0, 0, 0, 0], fingers: [null, 2, null, null, null, null], notes: ['E2','B2','E3','G3','B3','E4'] }] },
+    { type: 'm7',   shapes: [{ label: 'open', frets: [0, 2, 0, 0, 0, 0], fingers: [null, 2, null, null, null, null], notes: ['E2','B2','D3','G3','B3','E4'] }] },
     { type: 'sus4', shapes: [{ label: 'open', frets: [0, 2, 2, 2, 0, 0], fingers: [null, 1, 2, 3, null, null], notes: ['E2','B2','E3','A3','B3','E4'] }] },
   ] },
   { root: 'F', types: [

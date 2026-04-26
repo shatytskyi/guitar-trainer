@@ -24,13 +24,17 @@ function applyTheme(theme: ThemeId): void {
   if (meta) meta.setAttribute('content', THEME_COLORS[theme]);
 }
 
+function applyDocumentLang(lang: Settings['lang']): void {
+  document.documentElement.lang = lang;
+}
+
 export function startApp(host: HTMLElement): void {
   const dictionaries: Dictionaries = { ru, en, uk };
   const settings = createSettingsStore(window.localStorage);
   const i18n = createTranslator(dictionaries, settings.get().lang);
 
   applyTheme(settings.get().theme);
-  settings.subscribe(s => applyTheme(s.theme));
+  applyDocumentLang(settings.get().lang);
 
   const shell = createAppShell();
   host.appendChild(shell.root);
@@ -64,28 +68,30 @@ export function startApp(host: HTMLElement): void {
 
   function activate(id: string) {
     if (active && active.id === id) return;
+    const focusedContent = document.activeElement instanceof HTMLElement
+      && shell.contentSlot.contains(document.activeElement);
     active?.unmount();
     shell.contentSlot.replaceChildren();
     const next = features.find(f => f.id === id) ?? features[0];
     if (!next) return;
     active = next;
     next.mount(shell.contentSlot, ctx());
-    settings.set({ lastFeatureId: next.id });
-    tabBar.refresh();
+    if (focusedContent) shell.contentSlot.focus({ preventScroll: true });
+    if (settings.get().lastFeatureId !== next.id) {
+      settings.set({ lastFeatureId: next.id });
+    } else {
+      tabBar.refresh();
+    }
   }
 
   window.addEventListener('hashchange', () => activate(currentId()));
 
   settings.subscribe((s: Settings) => {
+    applyTheme(s.theme);
     if (s.lang !== i18n.lang) i18n.setLang(s.lang);
-  });
-  i18n.onLangChange(() => {
+    applyDocumentLang(s.lang);
     topBar.refresh();
     tabBar.refresh();
-    active?.onContextChange?.(ctx());
-  });
-  settings.subscribe(() => {
-    topBar.refresh();
     active?.onContextChange?.(ctx());
   });
 

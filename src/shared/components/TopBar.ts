@@ -2,6 +2,8 @@ import { createButton } from './Button';
 import type { Translator } from '../services/i18n';
 import type { Lang, ChordSet, SettingsStore, ThemeId } from '../services/settings';
 
+const APP_TITLE_SUFFIX = '.';
+
 export interface TopBarOptions {
   i18n: Translator;
   settings: SettingsStore;
@@ -36,7 +38,7 @@ export function createTopBar(opts: TopBarOptions): { root: HTMLElement; refresh(
   return { root, refresh: build };
 
   function build() {
-    title.innerHTML = `${escapeHtml(opts.i18n.t('app.title'))}<em>${escapeHtml(opts.i18n.t('app.title.suffix'))}</em>`;
+    title.innerHTML = `${escapeHtml(opts.i18n.t('app.title'))}<em>${APP_TITLE_SUFFIX}</em>`;
 
     const theme = opts.settings.get().theme;
     themeBtn.textContent = theme === 'stage' ? '☼' : '☽';

@@ -3,10 +3,12 @@ import { createStage } from '../../shared/components/Stage';
 import { createChordCard, type ChordCardHandle } from '../../shared/components/ChordCard';
 import { chordDisplayName } from '../../shared/lib/chord';
 import { rootsForSet } from '../../data/sets';
-import { type BrowseState, selectRoot, selectShape, selectType } from './state';
+import { type BrowseState, selectRoot, selectShape, selectType, syncBrowseSet } from './state';
 import type { Translator } from '../../shared/services/i18n';
 import type { AudioOutput } from '../../shared/services/audio';
-import type { SettingsStore } from '../../shared/services/settings';
+import type { ChordSet, SettingsStore } from '../../shared/services/settings';
+
+const RECOMMENDED_MARK = '★';
 
 export interface BrowseViewDeps {
   i18n: Translator;
@@ -14,18 +16,30 @@ export interface BrowseViewDeps {
   settings: SettingsStore;
 }
 
-export function mountBrowseView(host: HTMLElement, deps: BrowseViewDeps): () => void {
+export interface BrowseViewHandle {
+  destroy(): void;
+  refresh(deps: BrowseViewDeps): void;
+}
+
+export function mountBrowseView(host: HTMLElement, initialDeps: BrowseViewDeps): BrowseViewHandle {
+  let deps = initialDeps;
+  let activeSet: ChordSet = deps.settings.get().set;
+
   const root = document.createElement('div');
   root.className = 'browse';
   host.appendChild(root);
 
   const stageWrap = document.createElement('div');
   stageWrap.className = 'browse__stage';
+  stageWrap.id = 'browse-stage-panel';
+  stageWrap.setAttribute('role', 'tabpanel');
   root.appendChild(stageWrap);
 
   const rootRail = document.createElement('div');
   rootRail.className = 'root-rail';
   rootRail.setAttribute('role', 'tablist');
+  rootRail.setAttribute('aria-label', deps.i18n.t('feature.chord-browse.title'));
+  rootRail.addEventListener('keydown', onRootRailKeydown);
   root.appendChild(rootRail);
 
   let state: BrowseState = { selectedRoot: null, typeIdx: 0, shapeIdx: 0 };
@@ -43,26 +57,48 @@ export function mountBrowseView(host: HTMLElement, deps: BrowseViewDeps): () => 
 
   render();
 
-  return () => host.replaceChildren();
+  return {
+    destroy() {
+      host.replaceChildren();
+    },
+    refresh(nextDeps) {
+      deps = nextDeps;
+      syncSet();
+      empty.textContent = deps.i18n.t('browse.empty');
+      rootRail.setAttribute('aria-label', deps.i18n.t('feature.chord-browse.title'));
+      render();
+    },
+  };
 
   function render() {
     paintRootRail();
     paintStage();
   }
 
+  function syncSet() {
+    const nextSet = deps.settings.get().set;
+    if (activeSet === nextSet) return;
+    activeSet = nextSet;
+    state = syncBrowseSet(state, rootsForSet(nextSet));
+  }
+
   function paintRootRail() {
     rootRail.replaceChildren();
-    for (const r of rootsForSet(deps.settings.get().set)) {
+    const roots = rootsForSet(deps.settings.get().set);
+    roots.forEach((r, idx) => {
+      const active = r === state.selectedRoot;
       rootRail.appendChild(createRootTile({
         root: r.root,
-        active: r === state.selectedRoot,
+        active,
+        tabIndex: active || (!state.selectedRoot && idx === 0) ? 0 : -1,
         onClick: () => {
           state = selectRoot(r);
           render();
+          focusRoot(r.root);
           scrollActiveRootIntoView();
         },
       }));
-    }
+    });
   }
 
   function paintStage() {
@@ -89,7 +125,7 @@ export function mountBrowseView(host: HTMLElement, deps: BrowseViewDeps): () => 
         })),
         shapes: type.shapes.map((s, i) => ({
           id: String(i),
-          label: deps.i18n.t(`shape.${s.label}`) + (s.recommended ? ' ' + deps.i18n.t('shape.recommended') : ''),
+          label: deps.i18n.t(`shape.${s.label}`) + (s.recommended ? ` ${RECOMMENDED_MARK}` : ''),
           active: i === state.shapeIdx,
         })),
         shape,
@@ -116,5 +152,33 @@ export function mountBrowseView(host: HTMLElement, deps: BrowseViewDeps): () => 
     if (!active) return;
     const targetLeft = active.offsetLeft - (rootRail.clientWidth - active.offsetWidth) / 2;
     rootRail.scrollTo({ left: targetLeft, behavior: 'smooth' });
+  }
+
+  function focusRoot(rootName: string) {
+    for (const tile of rootRail.querySelectorAll<HTMLButtonElement>('.root-tile')) {
+      if (tile.dataset['root'] === rootName) {
+        tile.focus();
+        return;
+      }
+    }
+  }
+
+  function onRootRailKeydown(e: KeyboardEvent) {
+    const tiles = Array.from(rootRail.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+    if (tiles.length === 0) return;
+
+    const currentIdx = tiles.indexOf(document.activeElement as HTMLButtonElement);
+    const fallbackIdx = tiles.findIndex(tile => tile.getAttribute('aria-selected') === 'true');
+    const idx = currentIdx >= 0 ? currentIdx : Math.max(fallbackIdx, 0);
+    let nextIdx: number | null = null;
+
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextIdx = (idx + 1) % tiles.length;
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') nextIdx = (idx - 1 + tiles.length) % tiles.length;
+    if (e.key === 'Home') nextIdx = 0;
+    if (e.key === 'End') nextIdx = tiles.length - 1;
+    if (nextIdx == null) return;
+
+    e.preventDefault();
+    tiles[nextIdx]?.click();
   }
 }

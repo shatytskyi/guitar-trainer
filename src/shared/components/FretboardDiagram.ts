@@ -31,18 +31,18 @@ export function renderFretboardDiagram(shape: ChordShape): string {
   for (let s = 0; s < 6; s++) {
     const x = padX + s * stringSpacing;
     const f = shape.frets[s];
-    const y = padTop - 12;
+    const y = padTop - 16;
     if (f === null) {
-      parts.push(`<text x="${x}" y="${y}" text-anchor="middle" font-family="var(--font-mono)" font-size="14" fill="var(--ink-soft)" font-weight="600">×</text>`);
+      parts.push(`<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" font-family="var(--font-mono)" font-size="14" fill="var(--ink-soft)" font-weight="600">×</text>`);
     } else if (f === 0) {
-      parts.push(`<circle cx="${x}" cy="${y - 4}" r="5" fill="none" stroke="var(--ink)" stroke-width="1.5"/>`);
+      parts.push(`<circle cx="${x}" cy="${y}" r="5" fill="none" stroke="var(--ink)" stroke-width="1.5"/>`);
     }
   }
 
   if (fretOffset === 0) {
     parts.push(`<rect x="${padX - 1}" y="${padTop}" width="${fretboardW + 2}" height="4" fill="var(--ink)"/>`);
   } else {
-    parts.push(`<text x="${padX - 10}" y="${padTop + fretSpacing / 2 + 4}" text-anchor="end" font-family="var(--font-mono)" font-size="11" fill="var(--ink-soft)" font-weight="600">${fretOffset + 1}fr</text>`);
+    parts.push(`<text x="${padX - 10}" y="${padTop + fretSpacing / 2}" text-anchor="end" dominant-baseline="central" font-family="var(--font-mono)" font-size="11" fill="var(--ink-soft)" font-weight="600">${fretOffset + 1}fr</text>`);
   }
 
   for (let f = 0; f <= 5; f++) {
@@ -75,7 +75,7 @@ export function renderFretboardDiagram(shape: ChordShape): string {
       parts.push(`<rect x="${x1 - dotR}" y="${y - dotR}" width="${x2 - x1 + dotR * 2}" height="${barreH}" rx="${dotR}" fill="var(--ink)"/>`);
       if (b.finger != null) {
         const midX = (x1 + x2) / 2;
-        parts.push(`<text x="${midX}" y="${y + 4}" text-anchor="middle" font-family="var(--font-mono)" font-size="11" fill="var(--on-accent)" font-weight="600">${b.finger}</text>`);
+        parts.push(`<text x="${midX}" y="${y}" text-anchor="middle" dominant-baseline="central" font-family="var(--font-mono)" font-size="11" fill="var(--on-accent)" font-weight="600">${b.finger}</text>`);
       }
     }
   });
@@ -93,7 +93,7 @@ export function renderFretboardDiagram(shape: ChordShape): string {
       if (!isBarred) {
         parts.push(`<circle cx="${x}" cy="${y}" r="${dotR}" fill="var(--ink)"/>`);
         if (finger != null) {
-          parts.push(`<text x="${x}" y="${y + 4}" text-anchor="middle" font-family="var(--font-mono)" font-size="11" fill="var(--on-accent)" font-weight="600">${finger}</text>`);
+          parts.push(`<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" font-family="var(--font-mono)" font-size="11" fill="var(--on-accent)" font-weight="600">${finger}</text>`);
         }
       }
     }

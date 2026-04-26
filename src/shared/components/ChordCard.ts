@@ -59,12 +59,12 @@ export function createChordCard(i18n: Translator): ChordCardHandle {
       meta.textContent = data.metaText;
       meta.classList.toggle('chord-card__meta--shown', data.metaText !== '');
 
-      // Hide the row entirely when no options. In quiz the row is always
-      // populated; in browse data.types is always [] so the internal type
-      // row is permanently absent — both states are stable, no jumps.
+      // Hide empty option rows so callers can omit a control surface without
+      // leaving a visual gap.
+      const focusedOption = getFocusedOption(root);
       typeRow.style.display = data.types.length > 0 ? '' : 'none';
       typeBtns.replaceChildren(...data.types.map(t =>
-        createButton({
+        createOptionButton('type', t.id, {
           label: t.label,
           variant: 'pill',
           active: t.active,
@@ -75,13 +75,14 @@ export function createChordCard(i18n: Translator): ChordCardHandle {
 
       shapeRow.style.display = data.shapes.length > 0 ? '' : 'none';
       shapeBtns.replaceChildren(...data.shapes.map(s =>
-        createButton({
+        createOptionButton('shape', s.id, {
           label: s.label,
           variant: 'pill',
           active: s.active,
           onClick: () => cb.onShapeSelect(s.id),
         }),
       ));
+      restoreFocusedOption(root, focusedOption);
 
       const transitioning =
         displayedHidden !== undefined &&
@@ -156,6 +157,35 @@ function el(tag: string, className: string): HTMLElement {
   const e = document.createElement(tag);
   e.className = className;
   return e;
+}
+
+function createOptionButton(
+  kind: 'type' | 'shape',
+  id: string,
+  opts: Parameters<typeof createButton>[0],
+): HTMLButtonElement {
+  const btn = createButton(opts);
+  btn.dataset['optionKind'] = kind;
+  btn.dataset['optionId'] = id;
+  return btn;
+}
+
+function getFocusedOption(root: HTMLElement): { kind: string; id: string } | null {
+  const active = document.activeElement;
+  if (!(active instanceof HTMLButtonElement) || !root.contains(active)) return null;
+  const kind = active.dataset['optionKind'];
+  const id = active.dataset['optionId'];
+  return kind && id ? { kind, id } : null;
+}
+
+function restoreFocusedOption(root: HTMLElement, focused: { kind: string; id: string } | null): void {
+  if (!focused) return;
+  for (const btn of root.querySelectorAll<HTMLButtonElement>('button')) {
+    if (btn.dataset['optionKind'] === focused.kind && btn.dataset['optionId'] === focused.id) {
+      btn.focus();
+      return;
+    }
+  }
 }
 
 function setDiagramActivation(

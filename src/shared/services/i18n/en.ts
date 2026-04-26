@@ -2,7 +2,6 @@ import type { Dictionary } from './index';
 
 const en: Dictionary = {
   'app.title': 'Chords',
-  'app.title.suffix': '.',
 
   'set.basic': 'basic',
   'set.extended': '+ extended',
@@ -11,7 +10,6 @@ const en: Dictionary = {
   'feature.chord-quiz.title': 'Quiz',
   'feature.chord-browse.title': 'Browse',
 
-  'quiz.label.type': 'type',
   'quiz.reveal': 'tap to reveal the diagram',
   'quiz.hide-diagram': 'hide diagram',
   'quiz.btn.play': '▶ Play',
@@ -22,9 +20,6 @@ const en: Dictionary = {
   'shape.open': 'open',
   'shape.barre': 'barre',
   'shape.mini': 'mini',
-  'shape.recommended': '★',
-
-  'chord.type.': 'major',
   'chord.type.m': 'minor',
   'chord.type.7': 'dominant 7',
   'chord.type.maj7': 'maj 7',

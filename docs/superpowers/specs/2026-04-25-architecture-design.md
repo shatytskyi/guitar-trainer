@@ -239,8 +239,8 @@ Done. Shell auto-renders the new tab.
 
 - `vite-plugin-pwa` with Workbox under the hood.
 - Precache: all bundled assets (HTML, JS, CSS, icons, fonts, JSON).
-- Runtime cache: `CacheFirst` for Google Fonts and Tone.js CDN
-  (so the first load stocks the cache; subsequent loads work offline).
+- Runtime cache: `CacheFirst` for Google Fonts. Tone.js is imported from npm
+  and bundled into the production JS assets.
 - Manifest fields: `name`, `short_name`, `start_url`, `display: standalone`,
   `theme_color`, `background_color`, `icons` (192/512/maskable).
 - Update flow: when SW detects a new version, post a non-blocking toast

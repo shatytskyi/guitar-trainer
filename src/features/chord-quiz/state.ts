@@ -38,6 +38,10 @@ export function nextChord(state: QuizState): QuizState {
   return newState(state.set, state.current);
 }
 
+export function syncQuizSet(state: QuizState, set: ChordSet): QuizState {
+  return state.set === set ? state : newState(set, state.current);
+}
+
 function sameChord(a: FlatChord, b: FlatChord): boolean {
   return a.root.root === b.root.root && a.type.type === b.type.type;
 }

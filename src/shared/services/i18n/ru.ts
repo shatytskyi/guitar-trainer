@@ -2,7 +2,6 @@ import type { Dictionary } from './index';
 
 const ru: Dictionary = {
   'app.title': 'Аккорды',
-  'app.title.suffix': '.',
 
   'set.basic': 'базовый',
   'set.extended': '+ расшир.',
@@ -11,7 +10,6 @@ const ru: Dictionary = {
   'feature.chord-quiz.title': 'Квиз',
   'feature.chord-browse.title': 'Все аккорды',
 
-  'quiz.label.type': 'тип',
   'quiz.reveal': 'нажми чтобы увидеть схему',
   'quiz.hide-diagram': 'скрывать схему',
   'quiz.btn.play': '▶ Play',
@@ -22,9 +20,6 @@ const ru: Dictionary = {
   'shape.open': 'откр.',
   'shape.barre': 'баррэ',
   'shape.mini': 'мини',
-  'shape.recommended': '★',
-
-  'chord.type.': 'мажор',
   'chord.type.m': 'минор',
   'chord.type.7': 'септ',
   'chord.type.maj7': 'maj7',
