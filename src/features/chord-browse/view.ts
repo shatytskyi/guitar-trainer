@@ -1,7 +1,6 @@
 import { createRootTile } from '../../shared/components/RootTile';
 import { createStage } from '../../shared/components/Stage';
 import { createChordCard, type ChordCardHandle } from '../../shared/components/ChordCard';
-import { createButton } from '../../shared/components/Button';
 import { chordDisplayName } from '../../shared/lib/chord';
 import { rootsForSet } from '../../data/sets';
 import { type BrowseState, selectRoot, selectShape, selectType } from './state';
@@ -23,12 +22,6 @@ export function mountBrowseView(host: HTMLElement, deps: BrowseViewDeps): () => 
   const stageWrap = document.createElement('div');
   stageWrap.className = 'browse__stage';
   root.appendChild(stageWrap);
-
-  const typeRail = document.createElement('div');
-  typeRail.className = 'type-rail';
-  typeRail.setAttribute('role', 'tablist');
-  typeRail.setAttribute('aria-label', deps.i18n.t('quiz.label.type'));
-  root.appendChild(typeRail);
 
   const rootRail = document.createElement('div');
   rootRail.className = 'root-rail';
@@ -54,7 +47,6 @@ export function mountBrowseView(host: HTMLElement, deps: BrowseViewDeps): () => 
 
   function render() {
     paintRootRail();
-    paintTypeRail();
     paintStage();
   }
 
@@ -71,23 +63,6 @@ export function mountBrowseView(host: HTMLElement, deps: BrowseViewDeps): () => 
         },
       }));
     }
-  }
-
-  function paintTypeRail() {
-    typeRail.replaceChildren();
-    const r = state.selectedRoot;
-    // Always keep the rail in layout so its appearance after the first
-    // root selection doesn't push the chord card up.
-    typeRail.style.visibility = r && r.types.length > 1 ? 'visible' : 'hidden';
-    if (!r || r.types.length <= 1) return;
-    r.types.forEach((t, i) => {
-      typeRail.appendChild(createButton({
-        label: t.type === '' ? '—' : t.type,
-        variant: 'pill',
-        active: i === state.typeIdx,
-        onClick: () => { state = selectType(state, i); render(); },
-      }));
-    });
   }
 
   function paintStage() {
@@ -107,7 +82,11 @@ export function mountBrowseView(host: HTMLElement, deps: BrowseViewDeps): () => 
       {
         displayName: chordDisplayName({ root: r.root, type: type.type }),
         metaText: type.type === '' ? '' : deps.i18n.t(`chord.type.${type.type}`),
-        types: [], // type pills live in the external rail
+        types: r.types.map((t, i) => ({
+          id: String(i),
+          label: t.type === '' ? '—' : t.type,
+          active: i === state.typeIdx,
+        })),
         shapes: type.shapes.map((s, i) => ({
           id: String(i),
           label: deps.i18n.t(`shape.${s.label}`) + (s.recommended ? ' ' + deps.i18n.t('shape.recommended') : ''),
@@ -117,7 +96,7 @@ export function mountBrowseView(host: HTMLElement, deps: BrowseViewDeps): () => 
         hidden: false,
       },
       {
-        onTypeSelect: () => { /* no-op: managed by external rail */ },
+        onTypeSelect: id => { state = selectType(state, Number(id)); render(); },
         onShapeSelect: id => { state = selectShape(state, Number(id)); paintStage(); },
         onReveal: () => { /* never hidden in browse */ },
         onDiagramActivate: () => play(),

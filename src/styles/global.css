@@ -576,10 +576,19 @@ button:focus-visible,
 .quiz-controls {
   display: flex;
   gap: var(--space-3);
-  justify-content: center;
-  flex-wrap: wrap;
+  justify-content: stretch;
   flex-shrink: 0;
-  margin-top: var(--space-3);
+  margin: var(--space-3) calc(-1 * var(--space-5)) 0;
+  padding: 0 var(--space-5);
+}
+.quiz-controls > .btn--lg { flex: 1; }
+
+.btn--lg {
+  height: 88px;
+  min-height: 88px;
+  font-size: var(--text-lg);
+  letter-spacing: var(--tracking-wide);
+  border-radius: var(--radius-sm);
 }
 
 /* ─── Browse layout (edge-to-edge, no vertical scroll) ─── */
@@ -610,35 +619,21 @@ button:focus-visible,
   text-transform: uppercase;
 }
 
-/* Horizontal snap rails — phone-first picker pattern.
+/* Horizontal snap rail — phone-first picker pattern.
    Negative horizontal margin breaks out of app-shell padding for edge-to-edge feel. */
-.type-rail,
 .root-rail {
   display: flex;
-  gap: var(--space-2);
+  gap: var(--space-3);
   overflow-x: auto;
   overflow-y: visible;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   margin: 0 calc(-1 * var(--space-5));
-  padding: var(--space-2) var(--space-5);
-  flex-shrink: 0;
-}
-.type-rail::-webkit-scrollbar,
-.root-rail::-webkit-scrollbar { display: none; }
-
-.type-rail {
-  align-items: center;
-  justify-content: flex-start;
-  min-height: var(--tap-target);
-}
-.type-rail .btn--pill { flex-shrink: 0; }
-
-.root-rail {
-  gap: var(--space-3);
-  scroll-snap-type: x mandatory;
   padding: var(--space-2) var(--space-5) var(--space-3);
+  flex-shrink: 0;
+  scroll-snap-type: x mandatory;
 }
+.root-rail::-webkit-scrollbar { display: none; }
 .root-rail .root-tile {
   flex: 0 0 84px;
   width: 84px;

@@ -46,8 +46,9 @@ export function mountQuizView(host: HTMLElement, deps: QuizViewDeps): () => void
     variant: 'primary',
     onClick: () => { state = nextChord(state); render(); },
   });
+  nextBtn.classList.add('btn--lg');
   controls.append(nextBtn);
-  stage.body.appendChild(controls);
+  host.appendChild(controls);
 
   let state: QuizState = newState(deps.settings.get().set);
   render();
