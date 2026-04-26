@@ -29,10 +29,14 @@ export function createTopBar(opts: TopBarOptions): { root: HTMLElement; refresh(
   const setSwitch = document.createElement('div');
   setSwitch.className = 'topbar__switch';
 
-  const langSwitch = document.createElement('div');
-  langSwitch.className = 'topbar__switch';
+  const langSelect = document.createElement('select');
+  langSelect.className = 'topbar__select';
+  langSelect.addEventListener('change', () => {
+    const next = langSelect.value;
+    if (isLang(next)) opts.settings.set({ lang: next });
+  });
 
-  cluster.append(themeBtn, setSwitch, langSwitch);
+  cluster.append(setSwitch, themeBtn, langSelect);
   root.append(title, cluster);
   build();
   return { root, refresh: build };
@@ -47,7 +51,7 @@ export function createTopBar(opts: TopBarOptions): { root: HTMLElement; refresh(
     themeBtn.setAttribute('aria-pressed', String(theme === 'stage'));
 
     setSwitch.replaceChildren();
-    (['basic', 'extended', 'all'] as ChordSet[]).forEach(s => {
+    (['basic', 'extended', 'all', 'favorites'] as ChordSet[]).forEach(s => {
       const b = createButton({
         label: opts.i18n.t(`set.${s}`),
         variant: 'pill',
@@ -57,17 +61,20 @@ export function createTopBar(opts: TopBarOptions): { root: HTMLElement; refresh(
       setSwitch.appendChild(b);
     });
 
-    langSwitch.replaceChildren();
-    (['ru', 'en', 'uk'] as Lang[]).forEach(l => {
-      const b = createButton({
-        label: opts.i18n.t(`lang.${l}`),
-        variant: 'pill',
-        active: opts.settings.get().lang === l,
-        onClick: () => opts.settings.set({ lang: l }),
-      });
-      langSwitch.appendChild(b);
-    });
+    langSelect.setAttribute('aria-label', opts.i18n.t('lang.select'));
+    langSelect.setAttribute('title', opts.i18n.t('lang.select'));
+    langSelect.replaceChildren(...(['ru', 'en', 'uk'] as Lang[]).map(l => {
+      const option = document.createElement('option');
+      option.value = l;
+      option.textContent = opts.i18n.t(`lang.${l}`);
+      return option;
+    }));
+    langSelect.value = opts.settings.get().lang;
   }
+}
+
+function isLang(v: string): v is Lang {
+  return v === 'ru' || v === 'en' || v === 'uk';
 }
 
 const ESCAPE_MAP: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };

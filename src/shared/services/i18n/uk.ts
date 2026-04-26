@@ -6,16 +6,25 @@ const uk: Dictionary = {
   'set.basic': 'базовий',
   'set.extended': '+ розшир.',
   'set.all': 'усі',
+  'set.favorites': 'обране',
 
   'feature.chord-quiz.title': 'Квіз',
+  'feature.favorites.title': 'Обране',
   'feature.chord-browse.title': 'Усі акорди',
 
   'quiz.reveal': 'торкнись щоб побачити схему',
   'quiz.hide-diagram': 'ховати схему',
   'quiz.btn.play': '▶ Play',
   'quiz.btn.next': 'Далі →',
+  'quiz.empty-favorites': 'Додай акорди в обране зіркою, щоб тренувати тільки їх',
 
   'browse.empty': 'Обери ноту зі списку нижче',
+
+  'favorite.add': 'Додати в обране',
+  'favorite.remove': 'Прибрати з обраного',
+  'favorites.empty.title': 'Поки немає обраних акордів',
+  'favorites.empty.body': 'Відкрий квіз або список акордів і натисни зірку поруч із назвою.',
+  'favorites.play': 'Програти {chord}',
 
   'shape.open': 'відкр.',
   'shape.barre': 'баре',
@@ -41,6 +50,7 @@ const uk: Dictionary = {
   'lang.ru': 'RU',
   'lang.en': 'EN',
   'lang.uk': 'UK',
+  'lang.select': 'Обрати мову',
 
   'theme.toggle': 'перемкнути тему',
   'theme.paper': 'світла',

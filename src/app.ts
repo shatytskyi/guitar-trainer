@@ -2,6 +2,7 @@ import { createAppShell } from './shared/components/AppShell';
 import { createTopBar } from './shared/components/TopBar';
 import { createTabBar } from './shared/components/TabBar';
 import { createSettingsStore, type Settings } from './shared/services/settings';
+import { createFavoritesStore } from './shared/services/favorites';
 import { createTranslator, type Dictionaries } from './shared/services/i18n';
 import ru from './shared/services/i18n/ru';
 import en from './shared/services/i18n/en';
@@ -31,6 +32,7 @@ function applyDocumentLang(lang: Settings['lang']): void {
 export function startApp(host: HTMLElement): void {
   const dictionaries: Dictionaries = { ru, en, uk };
   const settings = createSettingsStore(window.localStorage);
+  const favorites = createFavoritesStore(window.localStorage);
   const i18n = createTranslator(dictionaries, settings.get().lang);
 
   applyTheme(settings.get().theme);
@@ -54,7 +56,7 @@ export function startApp(host: HTMLElement): void {
 
   function ctx(): FeatureContext {
     const s = settings.get();
-    return { set: s.set, lang: s.lang, audio, i18n, settings };
+    return { set: s.set, lang: s.lang, audio, i18n, settings, favorites };
   }
 
   function currentId(): string {
@@ -92,6 +94,10 @@ export function startApp(host: HTMLElement): void {
     applyDocumentLang(s.lang);
     topBar.refresh();
     tabBar.refresh();
+    active?.onContextChange?.(ctx());
+  });
+
+  favorites.subscribe(() => {
     active?.onContextChange?.(ctx());
   });
 

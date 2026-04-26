@@ -2,10 +2,12 @@ import { createRootTile } from '../../shared/components/RootTile';
 import { createStage } from '../../shared/components/Stage';
 import { createChordCard, type ChordCardHandle } from '../../shared/components/ChordCard';
 import { chordDisplayName } from '../../shared/lib/chord';
+import { favoriteIdForShape } from '../../shared/lib/favorites';
 import { rootsForSet } from '../../data/sets';
 import { type BrowseState, selectRoot, selectShape, selectType, syncBrowseSet } from './state';
 import type { Translator } from '../../shared/services/i18n';
 import type { AudioOutput } from '../../shared/services/audio';
+import type { FavoritesStore } from '../../shared/services/favorites';
 import type { ChordSet, SettingsStore } from '../../shared/services/settings';
 
 const RECOMMENDED_MARK = '★';
@@ -14,6 +16,7 @@ export interface BrowseViewDeps {
   i18n: Translator;
   audio: AudioOutput;
   settings: SettingsStore;
+  favorites: FavoritesStore;
 }
 
 export interface BrowseViewHandle {
@@ -77,14 +80,14 @@ export function mountBrowseView(host: HTMLElement, initialDeps: BrowseViewDeps):
 
   function syncSet() {
     const nextSet = deps.settings.get().set;
-    if (activeSet === nextSet) return;
+    if (activeSet === nextSet && nextSet !== 'favorites') return;
     activeSet = nextSet;
-    state = syncBrowseSet(state, rootsForSet(nextSet));
+    state = syncBrowseSet(state, rootsForSet(nextSet, deps.favorites.get()));
   }
 
   function paintRootRail() {
     rootRail.replaceChildren();
-    const roots = rootsForSet(deps.settings.get().set);
+    const roots = rootsForSet(deps.settings.get().set, deps.favorites.get());
     roots.forEach((r, idx) => {
       const active = r === state.selectedRoot;
       rootRail.appendChild(createRootTile({
@@ -114,6 +117,8 @@ export function mountBrowseView(host: HTMLElement, initialDeps: BrowseViewDeps):
     const r = state.selectedRoot;
     const type = r.types[state.typeIdx]!;
     const shape = type.shapes[state.shapeIdx]!;
+    const favoriteId = favoriteIdForShape(r.root, type.type, shape);
+    const favoriteActive = deps.favorites.isFavorite(favoriteId);
     card.render(
       {
         displayName: chordDisplayName({ root: r.root, type: type.type }),
@@ -130,12 +135,20 @@ export function mountBrowseView(host: HTMLElement, initialDeps: BrowseViewDeps):
         })),
         shape,
         hidden: false,
+        favorite: {
+          active: favoriteActive,
+          label: deps.i18n.t(favoriteActive ? 'favorite.remove' : 'favorite.add'),
+        },
       },
       {
         onTypeSelect: id => { state = selectType(state, Number(id)); render(); },
         onShapeSelect: id => { state = selectShape(state, Number(id)); paintStage(); },
         onReveal: () => { /* never hidden in browse */ },
         onDiagramActivate: () => play(),
+        onFavoriteToggle: () => {
+          deps.favorites.toggle(favoriteId);
+          render();
+        },
       },
     );
   }

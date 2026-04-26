@@ -11,6 +11,7 @@ export interface ChordCardData {
   shapes: ReadonlyArray<{ id: string; label: string; active: boolean }>;
   shape: ChordShape;
   hidden: boolean;
+  favorite?: { active: boolean; label: string };
 }
 
 export interface ChordCardCallbacks {
@@ -18,6 +19,7 @@ export interface ChordCardCallbacks {
   onShapeSelect: (id: string) => void;
   onReveal: () => void;
   onDiagramActivate?: () => void;
+  onFavoriteToggle?: () => void;
 }
 
 export interface ChordCardHandle {
@@ -30,9 +32,14 @@ export function createChordCard(i18n: Translator): ChordCardHandle {
   root.className = 'chord-card';
 
   const header = el('div', 'chord-card__header');
+  const title = el('div', 'chord-card__title');
   const name = el('div', 'chord-card__name');
+  const favoriteBtn = document.createElement('button');
+  favoriteBtn.type = 'button';
+  favoriteBtn.className = 'btn btn--icon chord-card__favorite';
   const meta = el('div', 'chord-card__meta');
-  header.append(name, meta);
+  title.append(name, favoriteBtn);
+  header.append(title, meta);
 
   const typeRow = el('div', 'chord-card__row');
   const typeBtns = el('div', 'chord-card__row-btns');
@@ -53,6 +60,7 @@ export function createChordCard(i18n: Translator): ChordCardHandle {
     root,
     render(data: ChordCardData, cb: ChordCardCallbacks) {
       paintChordName(name, data.displayName);
+      paintFavoriteButton(favoriteBtn, data, cb);
       // The meta sub-line animates in via CSS (max-height + opacity).
       // The header keeps a fixed min-height so the diagram below never
       // moves; when meta is empty, the name centers alone in that space.
@@ -130,6 +138,29 @@ export function createChordCard(i18n: Translator): ChordCardHandle {
       };
     },
   };
+}
+
+function paintFavoriteButton(
+  btn: HTMLButtonElement,
+  data: ChordCardData,
+  cb: ChordCardCallbacks,
+): void {
+  if (!data.favorite || !cb.onFavoriteToggle) {
+    btn.hidden = true;
+    btn.onclick = null;
+    btn.removeAttribute('aria-label');
+    btn.removeAttribute('aria-pressed');
+    btn.removeAttribute('title');
+    return;
+  }
+
+  btn.hidden = false;
+  btn.textContent = data.favorite.active ? '★' : '☆';
+  btn.classList.toggle('chord-card__favorite--active', data.favorite.active);
+  btn.setAttribute('aria-label', data.favorite.label);
+  btn.setAttribute('aria-pressed', String(data.favorite.active));
+  btn.setAttribute('title', data.favorite.label);
+  btn.onclick = () => cb.onFavoriteToggle?.();
 }
 
 function prefersReducedMotion(): boolean {

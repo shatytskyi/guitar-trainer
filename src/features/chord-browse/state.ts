@@ -40,7 +40,8 @@ export function syncBrowseSet(state: BrowseState, roots: readonly RootEntry[]): 
 
   const currentShape = currentType?.shapes[state.shapeIdx];
   const matchingShapeIdx = currentShape
-    ? type.shapes.findIndex(shape => shape.label === currentShape.label)
+    ? type.shapes.findIndex(shape =>
+      shape.label === currentShape.label && shape.frets.join(',') === currentShape.frets.join(','))
     : -1;
 
   return {

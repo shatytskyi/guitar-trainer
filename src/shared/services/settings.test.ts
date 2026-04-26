@@ -30,11 +30,11 @@ describe('settings store', () => {
   it('hydrates from existing storage', () => {
     backing.setItem(
       'guitar-trainer.settings.v1',
-      JSON.stringify({ lang: 'en', set: 'extended', hideDiagram: false, theme: 'paper', lastFeatureId: 'chord-browse' }),
+      JSON.stringify({ lang: 'en', set: 'favorites', hideDiagram: false, theme: 'paper', lastFeatureId: 'favorites' }),
     );
     const store = createSettingsStore(backing as unknown as Storage);
     expect(store.get().lang).toBe('en');
-    expect(store.get().set).toBe('extended');
+    expect(store.get().set).toBe('favorites');
     expect(store.get().hideDiagram).toBe(false);
   });
 

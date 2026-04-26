@@ -6,16 +6,25 @@ const en: Dictionary = {
   'set.basic': 'basic',
   'set.extended': '+ extended',
   'set.all': 'all',
+  'set.favorites': 'favorites',
 
   'feature.chord-quiz.title': 'Quiz',
+  'feature.favorites.title': 'Favorites',
   'feature.chord-browse.title': 'Browse',
 
   'quiz.reveal': 'tap to reveal the diagram',
   'quiz.hide-diagram': 'hide diagram',
   'quiz.btn.play': '▶ Play',
   'quiz.btn.next': 'Next →',
+  'quiz.empty-favorites': 'Star chords first to train favorites only',
 
   'browse.empty': 'Pick a note from the grid below',
+
+  'favorite.add': 'Add to favorites',
+  'favorite.remove': 'Remove from favorites',
+  'favorites.empty.title': 'No favorite chords yet',
+  'favorites.empty.body': 'Open the quiz or chord list and tap the star next to a chord name.',
+  'favorites.play': 'Play {chord}',
 
   'shape.open': 'open',
   'shape.barre': 'barre',
@@ -41,6 +50,7 @@ const en: Dictionary = {
   'lang.ru': 'RU',
   'lang.en': 'EN',
   'lang.uk': 'UK',
+  'lang.select': 'Select language',
 
   'theme.toggle': 'toggle theme',
   'theme.paper': 'light',

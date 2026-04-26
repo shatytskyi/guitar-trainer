@@ -1,7 +1,7 @@
 const STORAGE_KEY = 'guitar-trainer.settings.v1';
 
 export type Lang = 'ru' | 'en' | 'uk';
-export type ChordSet = 'basic' | 'extended' | 'all';
+export type ChordSet = 'basic' | 'extended' | 'all' | 'favorites';
 export type ThemeId = 'paper' | 'stage';
 
 export interface Settings {
@@ -61,7 +61,7 @@ function isSettings(v: unknown): v is Settings {
   const r = v as Record<string, unknown>;
   return (
     (r['lang'] === 'ru' || r['lang'] === 'en' || r['lang'] === 'uk') &&
-    (r['set'] === 'basic' || r['set'] === 'extended' || r['set'] === 'all') &&
+    (r['set'] === 'basic' || r['set'] === 'extended' || r['set'] === 'all' || r['set'] === 'favorites') &&
     typeof r['hideDiagram'] === 'boolean' &&
     (r['theme'] === 'paper' || r['theme'] === 'stage') &&
     typeof r['lastFeatureId'] === 'string'

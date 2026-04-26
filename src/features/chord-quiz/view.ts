@@ -3,9 +3,11 @@ import { createChordCard } from '../../shared/components/ChordCard';
 import { createButton } from '../../shared/components/Button';
 import { createToggleSwitch } from '../../shared/components/ToggleSwitch';
 import { chordDisplayName } from '../../shared/lib/chord';
+import { favoriteIdForShape } from '../../shared/lib/favorites';
 import { getDefaultShapeIdx } from '../../shared/lib/music';
 import type { Translator } from '../../shared/services/i18n';
 import type { AudioOutput } from '../../shared/services/audio';
+import type { FavoritesStore } from '../../shared/services/favorites';
 import type { SettingsStore } from '../../shared/services/settings';
 import { newState, nextChord, syncQuizSet, type QuizState } from './state';
 
@@ -15,6 +17,7 @@ export interface QuizViewDeps {
   i18n: Translator;
   audio: AudioOutput;
   settings: SettingsStore;
+  favorites: FavoritesStore;
 }
 
 export interface QuizViewHandle {
@@ -24,7 +27,7 @@ export interface QuizViewHandle {
 
 export function mountQuizView(host: HTMLElement, initialDeps: QuizViewDeps): QuizViewHandle {
   let deps = initialDeps;
-  let state: QuizState = newState(deps.settings.get().set);
+  let state: QuizState = newState(deps.settings.get().set, deps.favorites.get());
 
   const toolbar = document.createElement('div');
   toolbar.className = 'quiz-toolbar';
@@ -51,12 +54,15 @@ export function mountQuizView(host: HTMLElement, initialDeps: QuizViewDeps): Qui
   const card = createChordCard(deps.i18n);
   stage.body.appendChild(card.root);
 
+  const empty = document.createElement('div');
+  empty.className = 'quiz-empty';
+
   const controls = document.createElement('div');
   controls.className = 'quiz-controls';
   const nextBtn = createButton({
     label: deps.i18n.t('quiz.btn.next'),
     variant: 'primary',
-    onClick: () => { state = nextChord(state); render(); },
+    onClick: () => { state = nextChord(state, deps.favorites.get()); render(); },
   });
   nextBtn.classList.add('btn--lg');
   controls.append(nextBtn);
@@ -70,7 +76,7 @@ export function mountQuizView(host: HTMLElement, initialDeps: QuizViewDeps): Qui
     },
     refresh(nextDeps) {
       deps = nextDeps;
-      state = syncQuizSet(state, deps.settings.get().set);
+      state = syncQuizSet(state, deps.settings.get().set, deps.favorites.get());
       const hideDiagramLabel = deps.i18n.t('quiz.hide-diagram');
       toolbarLabel.textContent = hideDiagramLabel;
       toggle.el.setAttribute('aria-label', hideDiagramLabel);
@@ -81,15 +87,28 @@ export function mountQuizView(host: HTMLElement, initialDeps: QuizViewDeps): Qui
   };
 
   function playCurrent() {
+    if (!state.current) return;
     const type = state.current.root.types[state.typeIdx];
     const shape = type?.shapes[state.shapeIdx];
     if (shape) void deps.audio.playNotes(shape.notes);
   }
 
   function render() {
+    if (!state.current) {
+      empty.textContent = deps.i18n.t('quiz.empty-favorites');
+      if (stage.body.firstChild !== empty) stage.body.replaceChildren(empty);
+      nextBtn.disabled = true;
+      return;
+    }
+
+    if (stage.body.firstChild !== card.root) stage.body.replaceChildren(card.root);
+    nextBtn.disabled = false;
+
     const root = state.current.root;
     const type = root.types[state.typeIdx]!;
     const shape = type.shapes[state.shapeIdx]!;
+    const favoriteId = favoriteIdForShape(root.root, type.type, shape);
+    const favoriteActive = deps.favorites.isFavorite(favoriteId);
     card.render(
       {
         displayName: chordDisplayName({ root: root.root, type: type.type }),
@@ -107,6 +126,10 @@ export function mountQuizView(host: HTMLElement, initialDeps: QuizViewDeps): Qui
         })),
         shape,
         hidden: deps.settings.get().hideDiagram && !state.revealed,
+        favorite: {
+          active: favoriteActive,
+          label: deps.i18n.t(favoriteActive ? 'favorite.remove' : 'favorite.add'),
+        },
       },
       {
         onTypeSelect: id => {
@@ -117,6 +140,10 @@ export function mountQuizView(host: HTMLElement, initialDeps: QuizViewDeps): Qui
         onShapeSelect: id => { state.shapeIdx = Number(id); render(); },
         onReveal: () => { state.revealed = true; render(); },
         onDiagramActivate: () => playCurrent(),
+        onFavoriteToggle: () => {
+          deps.favorites.toggle(favoriteId);
+          render();
+        },
       },
     );
   }

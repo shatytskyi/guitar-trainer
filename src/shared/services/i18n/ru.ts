@@ -6,16 +6,25 @@ const ru: Dictionary = {
   'set.basic': 'базовый',
   'set.extended': '+ расшир.',
   'set.all': 'все',
+  'set.favorites': 'избр.',
 
   'feature.chord-quiz.title': 'Квиз',
+  'feature.favorites.title': 'Избранное',
   'feature.chord-browse.title': 'Все аккорды',
 
   'quiz.reveal': 'нажми чтобы увидеть схему',
   'quiz.hide-diagram': 'скрывать схему',
   'quiz.btn.play': '▶ Play',
   'quiz.btn.next': 'Следующий →',
+  'quiz.empty-favorites': 'Добавь аккорды в избранное звездой, чтобы тренировать только их',
 
   'browse.empty': 'Выбери ноту из списка ниже',
+
+  'favorite.add': 'Добавить в избранное',
+  'favorite.remove': 'Убрать из избранного',
+  'favorites.empty.title': 'Пока нет избранных аккордов',
+  'favorites.empty.body': 'Открой квиз или список аккордов и нажми звезду рядом с названием.',
+  'favorites.play': 'Проиграть {chord}',
 
   'shape.open': 'откр.',
   'shape.barre': 'баррэ',
@@ -41,6 +50,7 @@ const ru: Dictionary = {
   'lang.ru': 'RU',
   'lang.en': 'EN',
   'lang.uk': 'UK',
+  'lang.select': 'Выбрать язык',
 
   'theme.toggle': 'переключить тему',
   'theme.paper': 'светлая',
