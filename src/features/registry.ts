@@ -3,5 +3,6 @@ import { chordQuiz } from './chord-quiz';
 import { chordLoops } from './chord-loops';
 import { favorites } from './favorites';
 import { chordBrowse } from './chord-browse';
+import { scales } from './scales';
 
-export const features: readonly Feature[] = [chordQuiz, chordLoops, favorites, chordBrowse];
+export const features: readonly Feature[] = [chordQuiz, chordLoops, scales, favorites, chordBrowse];
