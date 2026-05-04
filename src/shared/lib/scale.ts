@@ -1,4 +1,7 @@
 import { PITCH_CLASSES, parseNote, transposeNote, type PitchClass } from './note';
+import { STANDARD_TUNING } from './fretboard';
+
+export { STANDARD_TUNING } from './fretboard';
 
 export type ScalePlayDirection = 'ascending' | 'descending';
 
@@ -24,8 +27,6 @@ export interface ScaleFretWindow {
   readonly maxFret: number;
   readonly rootFret: number;
 }
-
-export const STANDARD_TUNING = ['E2', 'A2', 'D3', 'G3', 'B3', 'E4'] as const;
 
 export function pitchClassAt(root: PitchClass, semitones: number): PitchClass {
   const rootIdx = PITCH_CLASSES.indexOf(root);

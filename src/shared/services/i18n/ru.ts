@@ -11,6 +11,7 @@ const ru: Dictionary = {
   'feature.chord-quiz.title': 'Квиз',
   'feature.chord-loops.title': 'Смены',
   'feature.scales.title': 'Гаммы',
+  'feature.note-finder.title': 'Ноты',
   'feature.favorites.title': 'Избранное',
   'feature.chord-browse.title': 'Схемы',
 
@@ -77,6 +78,10 @@ const ru: Dictionary = {
   'scale.short.blues': 'блюз',
   'scale.short.major': 'мажор',
   'scale.short.natural-minor': 'минор',
+
+  'note-finder.select-notes': 'Выбрать ноты',
+  'note-finder.note-toggle': 'Переключить {note}',
+  'note-finder.position-label': '{note}, струна {string}, лад {fret}',
 
   'favorite.add': 'Добавить в избранное',
   'favorite.remove': 'Убрать из избранного',

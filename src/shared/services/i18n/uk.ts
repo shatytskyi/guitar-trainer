@@ -11,6 +11,7 @@ const uk: Dictionary = {
   'feature.chord-quiz.title': 'Квіз',
   'feature.chord-loops.title': 'Зміни',
   'feature.scales.title': 'Гами',
+  'feature.note-finder.title': 'Ноти',
   'feature.favorites.title': 'Обране',
   'feature.chord-browse.title': 'Схеми',
 
@@ -77,6 +78,10 @@ const uk: Dictionary = {
   'scale.short.blues': 'блюз',
   'scale.short.major': 'мажор',
   'scale.short.natural-minor': 'мінор',
+
+  'note-finder.select-notes': 'Обрати ноти',
+  'note-finder.note-toggle': 'Перемкнути {note}',
+  'note-finder.position-label': '{note}, струна {string}, лад {fret}',
 
   'favorite.add': 'Додати в обране',
   'favorite.remove': 'Прибрати з обраного',

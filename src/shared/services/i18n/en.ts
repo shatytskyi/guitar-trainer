@@ -11,6 +11,7 @@ const en: Dictionary = {
   'feature.chord-quiz.title': 'Quiz',
   'feature.chord-loops.title': 'Changes',
   'feature.scales.title': 'Scales',
+  'feature.note-finder.title': 'Notes',
   'feature.favorites.title': 'Favorites',
   'feature.chord-browse.title': 'Diagrams',
 
@@ -77,6 +78,10 @@ const en: Dictionary = {
   'scale.short.blues': 'blues',
   'scale.short.major': 'major',
   'scale.short.natural-minor': 'minor',
+
+  'note-finder.select-notes': 'Select notes',
+  'note-finder.note-toggle': 'Toggle {note}',
+  'note-finder.position-label': '{note}, {string} string, fret {fret}',
 
   'favorite.add': 'Add to favorites',
   'favorite.remove': 'Remove from favorites',
