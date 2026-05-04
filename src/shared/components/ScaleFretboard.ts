@@ -53,9 +53,10 @@ function appendHeader(root: HTMLElement, minFret: number, maxFret: number): void
 
   for (let fret = minFret; fret <= maxFret; fret += 1) {
     const label = document.createElement('div');
-    label.className = isMarkerFret(fret)
-      ? 'scale-fretboard__fret scale-fretboard__fret--marker'
-      : 'scale-fretboard__fret';
+    const classes = ['scale-fretboard__fret'];
+    if (fret === 0) classes.push('scale-fretboard__fret--open');
+    if (isMarkerFret(fret)) classes.push('scale-fretboard__fret--marker');
+    label.className = classes.join(' ');
     label.textContent = String(fret);
     root.appendChild(label);
   }

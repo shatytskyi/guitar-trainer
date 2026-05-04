@@ -1307,6 +1307,11 @@ button:focus-visible,
   color: var(--ink);
   font-weight: 700;
 }
+.scale-fretboard__fret--open {
+  color: var(--ink-mute);
+  background: color-mix(in srgb, var(--paper-sunken) 34%, transparent);
+  border-right: 3px solid var(--ink);
+}
 .scale-fretboard__string {
   position: sticky;
   left: 0;
@@ -1325,7 +1330,11 @@ button:focus-visible,
   border-right: 1px solid var(--border-soft);
 }
 .scale-fretboard__cell--nut {
-  border-left: 3px solid var(--ink);
+  border-right: 3px solid var(--ink);
+  background: color-mix(in srgb, var(--paper-sunken) 34%, transparent);
+}
+.scale-fretboard__cell--nut::before {
+  opacity: 0.32;
 }
 .scale-fretboard__cell::before {
   content: '';
@@ -1674,6 +1683,11 @@ button:focus-visible,
   color: var(--ink);
   font-weight: 700;
 }
+.note-finder-fretboard__fret--open {
+  color: var(--ink-mute);
+  background: color-mix(in srgb, var(--paper-sunken) 34%, transparent);
+  border-right: 3px solid var(--ink);
+}
 .note-finder-fretboard__string {
   position: sticky;
   left: 0;
@@ -1692,7 +1706,11 @@ button:focus-visible,
   border-right: 1px solid var(--border-soft);
 }
 .note-finder-fretboard__cell--nut {
-  border-left: 3px solid var(--ink);
+  border-right: 3px solid var(--ink);
+  background: color-mix(in srgb, var(--paper-sunken) 34%, transparent);
+}
+.note-finder-fretboard__cell--nut::before {
+  opacity: 0.32;
 }
 .note-finder-fretboard__cell::before {
   content: '';
