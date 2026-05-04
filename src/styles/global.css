@@ -1613,20 +1613,14 @@ button:focus-visible,
   color: #fff8e8;
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--note-color) 24%, transparent), var(--shadow-1);
 }
-.note-finder__note-toggle--active::before {
-  content: '';
-  width: 5px;
-  height: 9px;
-  margin-right: 4px;
-  border-right: 2px solid currentColor;
-  border-bottom: 2px solid currentColor;
-  transform: translateY(-1px) rotate(42deg);
-}
 .note-finder__stage {
-  flex: 1;
+  flex: 0 0 auto;
   min-height: 0;
   display: flex;
   flex-direction: column;
+}
+.note-finder__stage .stage {
+  flex: 0 0 auto;
 }
 .note-finder__header {
   flex-shrink: 0;
@@ -1644,7 +1638,7 @@ button:focus-visible,
 .note-finder__fretboard-scroll {
   --note-finder-row-height: clamp(30px, 7.1vh, 42px);
   --note-finder-header-height: clamp(18px, 4.2vh, 24px);
-  flex: 1;
+  flex: 0 0 auto;
   min-height: 0;
   overflow-x: auto;
   overflow-y: hidden;
