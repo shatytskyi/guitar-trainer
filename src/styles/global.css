@@ -1284,7 +1284,7 @@ button:focus-visible,
 }
 .scale-fretboard {
   display: grid;
-  grid-template-columns: 34px repeat(var(--scale-fret-count), minmax(46px, 1fr));
+  grid-template-columns: 40px repeat(var(--scale-fret-count), minmax(46px, 1fr));
   grid-template-rows: var(--scale-fretboard-header-height) repeat(6, var(--scale-fretboard-row-height));
   width: 100%;
   min-width: var(--scale-fret-min-width);
@@ -1307,17 +1307,8 @@ button:focus-visible,
   color: var(--ink);
   font-weight: 700;
 }
-.scale-fretboard__fret--open {
-  color: var(--ink-mute);
-  background: color-mix(in srgb, var(--paper-sunken) 34%, transparent);
-  border-right: 3px solid var(--ink);
-}
 .scale-fretboard__string {
-  position: sticky;
-  left: 0;
-  z-index: 3;
-  background: var(--paper-raised);
-  border-right: 1px solid var(--border-soft);
+  background: color-mix(in srgb, var(--paper-sunken) 34%, transparent);
   font-weight: 700;
 }
 .scale-fretboard__cell {
@@ -1330,8 +1321,7 @@ button:focus-visible,
   border-right: 1px solid var(--border-soft);
 }
 .scale-fretboard__cell--nut {
-  border-right: 3px solid var(--ink);
-  background: color-mix(in srgb, var(--paper-sunken) 34%, transparent);
+  border-left: 3px solid var(--ink);
 }
 .scale-fretboard__cell--nut::before {
   opacity: 0.32;
@@ -1654,7 +1644,7 @@ button:focus-visible,
 }
 .note-finder-fretboard {
   display: grid;
-  grid-template-columns: 30px repeat(var(--note-finder-fret-count), minmax(42px, 1fr));
+  grid-template-columns: 36px repeat(var(--note-finder-fret-count), minmax(42px, 1fr));
   grid-template-rows: var(--note-finder-header-height) repeat(6, var(--note-finder-row-height));
   width: 100%;
   min-width: var(--note-finder-fret-min-width);
@@ -1677,17 +1667,8 @@ button:focus-visible,
   color: var(--ink);
   font-weight: 700;
 }
-.note-finder-fretboard__fret--open {
-  color: var(--ink-mute);
-  background: color-mix(in srgb, var(--paper-sunken) 34%, transparent);
-  border-right: 3px solid var(--ink);
-}
 .note-finder-fretboard__string {
-  position: sticky;
-  left: 0;
-  z-index: 3;
-  background: var(--paper-raised);
-  border-right: 1px solid var(--border-soft);
+  background: color-mix(in srgb, var(--paper-sunken) 34%, transparent);
   font-weight: 700;
 }
 .note-finder-fretboard__cell {
@@ -1700,8 +1681,7 @@ button:focus-visible,
   border-right: 1px solid var(--border-soft);
 }
 .note-finder-fretboard__cell--nut {
-  border-right: 3px solid var(--ink);
-  background: color-mix(in srgb, var(--paper-sunken) 34%, transparent);
+  border-left: 3px solid var(--ink);
 }
 .note-finder-fretboard__cell--nut::before {
   opacity: 0.32;

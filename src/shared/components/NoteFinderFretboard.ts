@@ -26,21 +26,20 @@ export function renderNoteFinderFretboard(opts: NoteFinderFretboardOptions): HTM
     byPosition.set(positionKey(position.stringIndex, position.fret), position);
   }
 
-  const fretCount = opts.maxFret - opts.minFret + 1;
+  const firstFret = Math.max(1, opts.minFret);
+  const fretCount = opts.maxFret - firstFret + 1;
   const root = document.createElement('div');
   root.className = 'note-finder-fretboard';
   root.style.setProperty('--note-finder-fret-count', String(fretCount));
-  root.style.setProperty('--note-finder-fret-min-width', `${30 + fretCount * 42}px`);
+  root.style.setProperty('--note-finder-fret-min-width', `${36 + fretCount * 42}px`);
 
-  appendHeader(root, opts.minFret, opts.maxFret);
+  appendHeader(root, firstFret, opts.maxFret);
 
   for (const string of DISPLAY_STRINGS) {
-    const label = document.createElement('div');
-    label.className = 'note-finder-fretboard__string';
-    label.textContent = string.label;
-    root.appendChild(label);
+    const openPosition = byPosition.get(positionKey(string.index, 0));
+    root.appendChild(createStringCell(string.label, openPosition, opts));
 
-    for (let fret = opts.minFret; fret <= opts.maxFret; fret += 1) {
+    for (let fret = firstFret; fret <= opts.maxFret; fret += 1) {
       const position = byPosition.get(positionKey(string.index, fret));
       root.appendChild(position ? createCell(position, opts) : createCellShell(fret));
     }
@@ -57,7 +56,6 @@ function appendHeader(root: HTMLElement, minFret: number, maxFret: number): void
   for (let fret = minFret; fret <= maxFret; fret += 1) {
     const label = document.createElement('div');
     const classes = ['note-finder-fretboard__fret'];
-    if (fret === 0) classes.push('note-finder-fretboard__fret--open');
     if (isMarkerFret(fret)) classes.push('note-finder-fretboard__fret--marker');
     label.className = classes.join(' ');
     label.textContent = String(fret);
@@ -65,21 +63,44 @@ function appendHeader(root: HTMLElement, minFret: number, maxFret: number): void
   }
 }
 
+function createStringCell(
+  label: string,
+  openPosition: FretboardPosition | undefined,
+  opts: NoteFinderFretboardOptions,
+): HTMLElement {
+  const cell = document.createElement('div');
+  cell.className = 'note-finder-fretboard__string';
+  if (openPosition && opts.selectedPitchClasses.has(openPosition.pitchClass)) {
+    cell.appendChild(createNoteMarker(openPosition, opts));
+    return cell;
+  }
+
+  cell.textContent = label;
+  return cell;
+}
+
 function createCell(position: FretboardPosition, opts: NoteFinderFretboardOptions): HTMLElement {
   const cell = createCellShell(position.fret);
   if (!opts.selectedPitchClasses.has(position.pitchClass)) return cell;
 
+  cell.appendChild(createNoteMarker(position, opts));
+  return cell;
+}
+
+function createNoteMarker(position: FretboardPosition, opts: NoteFinderFretboardOptions): HTMLElement {
   const marker = document.createElement('span');
   marker.className = 'note-finder-fretboard__note';
-  marker.style.setProperty('--note-color', `var(${opts.colorVarForPitchClass(position.pitchClass)})`);
+  marker.style.setProperty(
+    '--note-color',
+    `var(${opts.colorVarForPitchClass(position.pitchClass)})`,
+  );
   marker.textContent = position.note;
   marker.setAttribute('aria-label', opts.i18n.t('note-finder.position-label', {
     note: position.note,
     string: position.stringLabel,
     fret: position.fret,
   }));
-  cell.appendChild(marker);
-  return cell;
+  return marker;
 }
 
 function createCellShell(fret: number): HTMLElement {
@@ -90,7 +111,7 @@ function createCellShell(fret: number): HTMLElement {
 
 function cellClass(fret: number): string {
   const classes = ['note-finder-fretboard__cell'];
-  if (fret === 0) classes.push('note-finder-fretboard__cell--nut');
+  if (fret === 1) classes.push('note-finder-fretboard__cell--nut');
   if (isMarkerFret(fret)) classes.push('note-finder-fretboard__cell--marker');
   return classes.join(' ');
 }

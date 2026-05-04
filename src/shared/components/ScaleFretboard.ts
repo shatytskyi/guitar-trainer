@@ -22,22 +22,21 @@ export interface ScaleFretboardOptions {
 export function renderScaleFretboard(opts: ScaleFretboardOptions): HTMLElement {
   const byPosition = new Map<string, FretboardScaleNote>();
   for (const note of opts.notes) byPosition.set(positionKey(note.stringIndex, note.fret), note);
-  const fretCount = opts.maxFret - opts.minFret + 1;
+  const firstFret = Math.max(1, opts.minFret);
+  const fretCount = opts.maxFret - firstFret + 1;
 
   const root = document.createElement('div');
   root.className = 'scale-fretboard';
   root.style.setProperty('--scale-fret-count', String(fretCount));
-  root.style.setProperty('--scale-fret-min-width', `${34 + fretCount * 46}px`);
+  root.style.setProperty('--scale-fret-min-width', `${40 + fretCount * 46}px`);
 
-  appendHeader(root, opts.minFret, opts.maxFret);
+  appendHeader(root, firstFret, opts.maxFret);
 
   for (const string of DISPLAY_STRINGS) {
-    const label = document.createElement('div');
-    label.className = 'scale-fretboard__string';
-    label.textContent = string.label;
-    root.appendChild(label);
+    const openNote = byPosition.get(positionKey(string.index, 0));
+    root.appendChild(createStringCell(string.label, openNote, opts));
 
-    for (let fret = opts.minFret; fret <= opts.maxFret; fret += 1) {
+    for (let fret = firstFret; fret <= opts.maxFret; fret += 1) {
       const note = byPosition.get(positionKey(string.index, fret));
       root.appendChild(note ? createNoteCell(note, opts) : createEmptyCell(fret));
     }
@@ -54,7 +53,6 @@ function appendHeader(root: HTMLElement, minFret: number, maxFret: number): void
   for (let fret = minFret; fret <= maxFret; fret += 1) {
     const label = document.createElement('div');
     const classes = ['scale-fretboard__fret'];
-    if (fret === 0) classes.push('scale-fretboard__fret--open');
     if (isMarkerFret(fret)) classes.push('scale-fretboard__fret--marker');
     label.className = classes.join(' ');
     label.textContent = String(fret);
@@ -68,10 +66,30 @@ function createEmptyCell(fret: number): HTMLElement {
   return cell;
 }
 
+function createStringCell(
+  label: string,
+  openNote: FretboardScaleNote | undefined,
+  opts: ScaleFretboardOptions,
+): HTMLElement {
+  const cell = document.createElement('div');
+  cell.className = 'scale-fretboard__string';
+  if (openNote) {
+    cell.appendChild(createNoteButton(openNote, opts));
+    return cell;
+  }
+
+  cell.textContent = label;
+  return cell;
+}
+
 function createNoteCell(note: FretboardScaleNote, opts: ScaleFretboardOptions): HTMLElement {
   const cell = document.createElement('div');
   cell.className = cellClass(note.fret);
+  cell.appendChild(createNoteButton(note, opts));
+  return cell;
+}
 
+function createNoteButton(note: FretboardScaleNote, opts: ScaleFretboardOptions): HTMLButtonElement {
   const btn = document.createElement('button');
   btn.type = 'button';
   btn.className = 'scale-fretboard__note';
@@ -92,13 +110,12 @@ function createNoteCell(note: FretboardScaleNote, opts: ScaleFretboardOptions): 
   degree.className = 'scale-fretboard__degree';
   degree.textContent = note.degree;
   btn.append(noteName, degree);
-  cell.appendChild(btn);
-  return cell;
+  return btn;
 }
 
 function cellClass(fret: number): string {
   const classes = ['scale-fretboard__cell'];
-  if (fret === 0) classes.push('scale-fretboard__cell--nut');
+  if (fret === 1) classes.push('scale-fretboard__cell--nut');
   if (isMarkerFret(fret)) classes.push('scale-fretboard__cell--marker');
   return classes.join(' ');
 }
