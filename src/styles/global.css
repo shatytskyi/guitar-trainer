@@ -1713,6 +1713,7 @@ button:focus-visible,
   z-index: 1;
   width: clamp(27px, calc(var(--note-finder-row-height) - 6px), 34px);
   height: clamp(27px, calc(var(--note-finder-row-height) - 6px), 34px);
+  padding: 0;
   border: 1px solid color-mix(in srgb, var(--note-color) 78%, var(--ink));
   border-radius: 50%;
   background: var(--note-color);
@@ -1725,6 +1726,21 @@ button:focus-visible,
   line-height: 1;
   letter-spacing: 0;
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--note-color) 22%, transparent), var(--shadow-1);
+  cursor: pointer;
+  appearance: none;
+  transition:
+    transform var(--duration-fast) var(--ease-default),
+    box-shadow var(--duration-fast) var(--ease-default);
+}
+.note-finder-fretboard__note:hover {
+  transform: scale(1.06);
+}
+.note-finder-fretboard__note:active {
+  transform: scale(0.94);
+}
+.note-finder-fretboard__note:focus-visible {
+  outline: 2px solid var(--note-color);
+  outline-offset: 2px;
 }
 
 /* ─── Favorites grid ────────────────────── */

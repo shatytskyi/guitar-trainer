@@ -1,7 +1,8 @@
 import { createStage } from '../../shared/components/Stage';
 import { renderNoteFinderFretboard } from '../../shared/components/NoteFinderFretboard';
-import { buildFretboardPositions } from '../../shared/lib/fretboard';
+import { buildFretboardPositions, type FretboardPosition } from '../../shared/lib/fretboard';
 import { PITCH_CLASSES } from '../../shared/lib/note';
+import type { AudioOutput } from '../../shared/services/audio';
 import type { Translator } from '../../shared/services/i18n';
 import {
   NOTE_FINDER_MAX_FRET,
@@ -15,6 +16,7 @@ import {
 
 export interface NoteFinderViewDeps {
   i18n: Translator;
+  audio: AudioOutput;
 }
 
 export interface NoteFinderViewHandle {
@@ -113,7 +115,12 @@ export function mountNoteFinderView(host: HTMLElement, initialDeps: NoteFinderVi
       minFret: 0,
       maxFret: NOTE_FINDER_MAX_FRET,
       colorVarForPitchClass: pitchClassColorVar,
+      onNoteActivate: playFretboardNote,
     }));
+  }
+
+  function playFretboardNote(position: FretboardPosition): void {
+    void deps.audio.playNotes([position.note], { strumDelay: 0 });
   }
 
   function focusPitchClass(pitchClass: string): void {

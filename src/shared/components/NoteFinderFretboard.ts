@@ -18,6 +18,7 @@ export interface NoteFinderFretboardOptions {
   readonly minFret: number;
   readonly maxFret: number;
   readonly colorVarForPitchClass: (pitchClass: PitchClass) => string;
+  readonly onNoteActivate: (position: FretboardPosition) => void;
 }
 
 export function renderNoteFinderFretboard(opts: NoteFinderFretboardOptions): HTMLElement {
@@ -88,7 +89,8 @@ function createCell(position: FretboardPosition, opts: NoteFinderFretboardOption
 }
 
 function createNoteMarker(position: FretboardPosition, opts: NoteFinderFretboardOptions): HTMLElement {
-  const marker = document.createElement('span');
+  const marker = document.createElement('button');
+  marker.type = 'button';
   marker.className = 'note-finder-fretboard__note';
   marker.style.setProperty(
     '--note-color',
@@ -100,6 +102,7 @@ function createNoteMarker(position: FretboardPosition, opts: NoteFinderFretboard
     string: position.stringLabel,
     fret: position.fret,
   }));
+  marker.addEventListener('click', () => opts.onNoteActivate(position));
   return marker;
 }
 
