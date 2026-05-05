@@ -38,11 +38,11 @@ export function renderNoteFinderFretboard(opts: NoteFinderFretboardOptions): HTM
 
   for (const string of DISPLAY_STRINGS) {
     const openPosition = byPosition.get(positionKey(string.index, 0));
-    root.appendChild(createStringCell(string.label, openPosition, opts));
+    root.appendChild(createStringCell(string.label, string.index, openPosition, opts));
 
     for (let fret = firstFret; fret <= opts.maxFret; fret += 1) {
       const position = byPosition.get(positionKey(string.index, fret));
-      root.appendChild(position ? createCell(position, opts) : createCellShell(fret));
+      root.appendChild(position ? createCell(position, opts) : createCellShell(string.index, fret));
     }
   }
 
@@ -66,11 +66,12 @@ function appendHeader(root: HTMLElement, minFret: number, maxFret: number): void
 
 function createStringCell(
   label: string,
+  stringIndex: number,
   openPosition: FretboardPosition | undefined,
   opts: NoteFinderFretboardOptions,
 ): HTMLElement {
   const cell = document.createElement('div');
-  cell.className = 'note-finder-fretboard__string';
+  cell.className = stringClass(stringIndex);
   if (openPosition) {
     cell.appendChild(createNoteMarker(openPosition, opts));
     return cell;
@@ -81,7 +82,7 @@ function createStringCell(
 }
 
 function createCell(position: FretboardPosition, opts: NoteFinderFretboardOptions): HTMLElement {
-  const cell = createCellShell(position.fret);
+  const cell = createCellShell(position.stringIndex, position.fret);
   cell.appendChild(createNoteMarker(position, opts));
   return cell;
 }
@@ -109,14 +110,18 @@ function createNoteMarker(position: FretboardPosition, opts: NoteFinderFretboard
   return marker;
 }
 
-function createCellShell(fret: number): HTMLElement {
+function createCellShell(stringIndex: number, fret: number): HTMLElement {
   const cell = document.createElement('div');
-  cell.className = cellClass(fret);
+  cell.className = cellClass(stringIndex, fret);
   return cell;
 }
 
-function cellClass(fret: number): string {
-  const classes = ['note-finder-fretboard__cell'];
+function stringClass(stringIndex: number): string {
+  return `note-finder-fretboard__string note-finder-fretboard__string-row-${stringIndex}`;
+}
+
+function cellClass(stringIndex: number, fret: number): string {
+  const classes = ['note-finder-fretboard__cell', `note-finder-fretboard__string-row-${stringIndex}`];
   if (fret === 1) classes.push('note-finder-fretboard__cell--nut');
   if (isMarkerFret(fret)) classes.push('note-finder-fretboard__cell--marker');
   return classes.join(' ');
