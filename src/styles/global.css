@@ -1709,30 +1709,44 @@ button:focus-visible,
   transform: translateX(-50%);
 }
 .note-finder-fretboard__note {
+  --note-color: var(--ink-mute);
   position: relative;
   z-index: 1;
-  width: clamp(27px, calc(var(--note-finder-row-height) - 6px), 34px);
-  height: clamp(27px, calc(var(--note-finder-row-height) - 6px), 34px);
+  width: clamp(23px, calc(var(--note-finder-row-height) - 12px), 29px);
+  height: clamp(23px, calc(var(--note-finder-row-height) - 12px), 29px);
   padding: 0;
-  border: 1px solid color-mix(in srgb, var(--note-color) 78%, var(--ink));
+  border: 1px solid color-mix(in srgb, var(--note-color) 52%, transparent);
   border-radius: 50%;
-  background: var(--note-color);
-  color: #fff8e8;
+  background: color-mix(in srgb, var(--ink-mute) 42%, transparent);
+  color: var(--ink-soft);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: clamp(9px, 2.1vh, 11px);
+  font-size: clamp(8px, 1.9vh, 10px);
   font-weight: 800;
   line-height: 1;
   letter-spacing: 0;
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--note-color) 22%, transparent), var(--shadow-1);
+  opacity: 0.48;
+  box-shadow: none;
   cursor: pointer;
   appearance: none;
   transition:
     transform var(--duration-fast) var(--ease-default),
+    opacity var(--duration-fast) var(--ease-default),
     box-shadow var(--duration-fast) var(--ease-default);
 }
+.note-finder-fretboard__note--selected {
+  width: clamp(27px, calc(var(--note-finder-row-height) - 6px), 34px);
+  height: clamp(27px, calc(var(--note-finder-row-height) - 6px), 34px);
+  border-color: color-mix(in srgb, var(--note-color) 78%, var(--ink));
+  background: var(--note-color);
+  color: #fff8e8;
+  font-size: clamp(9px, 2.1vh, 11px);
+  opacity: 1;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--note-color) 22%, transparent), var(--shadow-1);
+}
 .note-finder-fretboard__note:hover {
+  opacity: 1;
   transform: scale(1.06);
 }
 .note-finder-fretboard__note:active {

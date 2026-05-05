@@ -71,7 +71,7 @@ function createStringCell(
 ): HTMLElement {
   const cell = document.createElement('div');
   cell.className = 'note-finder-fretboard__string';
-  if (openPosition && opts.selectedPitchClasses.has(openPosition.pitchClass)) {
+  if (openPosition) {
     cell.appendChild(createNoteMarker(openPosition, opts));
     return cell;
   }
@@ -82,8 +82,6 @@ function createStringCell(
 
 function createCell(position: FretboardPosition, opts: NoteFinderFretboardOptions): HTMLElement {
   const cell = createCellShell(position.fret);
-  if (!opts.selectedPitchClasses.has(position.pitchClass)) return cell;
-
   cell.appendChild(createNoteMarker(position, opts));
   return cell;
 }
@@ -92,10 +90,15 @@ function createNoteMarker(position: FretboardPosition, opts: NoteFinderFretboard
   const marker = document.createElement('button');
   marker.type = 'button';
   marker.className = 'note-finder-fretboard__note';
-  marker.style.setProperty(
-    '--note-color',
-    `var(${opts.colorVarForPitchClass(position.pitchClass)})`,
-  );
+  const selected = opts.selectedPitchClasses.has(position.pitchClass);
+  marker.classList.toggle('note-finder-fretboard__note--selected', selected);
+  marker.classList.toggle('note-finder-fretboard__note--ghost', !selected);
+  if (selected) {
+    marker.style.setProperty(
+      '--note-color',
+      `var(${opts.colorVarForPitchClass(position.pitchClass)})`,
+    );
+  }
   marker.textContent = position.note;
   marker.setAttribute('aria-label', opts.i18n.t('note-finder.position-label', {
     note: position.note,
