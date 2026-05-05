@@ -46,6 +46,8 @@ export function renderNoteFinderFretboard(opts: NoteFinderFretboardOptions): HTM
     }
   }
 
+  appendFooter(root, firstFret, opts.maxFret);
+
   return root;
 }
 
@@ -57,6 +59,21 @@ function appendHeader(root: HTMLElement, minFret: number, maxFret: number): void
   for (let fret = minFret; fret <= maxFret; fret += 1) {
     const label = document.createElement('div');
     const classes = ['note-finder-fretboard__fret'];
+    if (isMarkerFret(fret)) classes.push('note-finder-fretboard__fret--marker');
+    label.className = classes.join(' ');
+    label.textContent = String(fret);
+    root.appendChild(label);
+  }
+}
+
+function appendFooter(root: HTMLElement, minFret: number, maxFret: number): void {
+  const corner = document.createElement('div');
+  corner.className = 'note-finder-fretboard__corner note-finder-fretboard__corner--bottom';
+  root.appendChild(corner);
+
+  for (let fret = minFret; fret <= maxFret; fret += 1) {
+    const label = document.createElement('div');
+    const classes = ['note-finder-fretboard__fret', 'note-finder-fretboard__fret--bottom'];
     if (isMarkerFret(fret)) classes.push('note-finder-fretboard__fret--marker');
     label.className = classes.join(' ');
     label.textContent = String(fret);

@@ -1645,10 +1645,10 @@ button:focus-visible,
 .note-finder-fretboard {
   display: grid;
   grid-template-columns: 36px repeat(var(--note-finder-fret-count), minmax(42px, 1fr));
-  grid-template-rows: var(--note-finder-header-height) repeat(6, var(--note-finder-row-height));
+  grid-template-rows: var(--note-finder-header-height) repeat(6, var(--note-finder-row-height)) var(--note-finder-header-height);
   width: 100%;
   min-width: var(--note-finder-fret-min-width);
-  height: calc(var(--note-finder-header-height) + var(--note-finder-row-height) * 6);
+  height: calc(var(--note-finder-header-height) * 2 + var(--note-finder-row-height) * 6);
   align-items: stretch;
   font-family: var(--font-mono);
 }
