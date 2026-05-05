@@ -1689,6 +1689,7 @@ button:focus-visible,
 .note-finder-fretboard__cell::before {
   content: '';
   position: absolute;
+  z-index: 0;
   left: 0;
   right: 0;
   top: 50%;
@@ -1699,6 +1700,7 @@ button:focus-visible,
 .note-finder-fretboard__cell--marker::after {
   content: '';
   position: absolute;
+  z-index: 0;
   left: 50%;
   bottom: 3px;
   width: 5px;
@@ -1711,22 +1713,22 @@ button:focus-visible,
 .note-finder-fretboard__note {
   --note-color: var(--ink-mute);
   position: relative;
-  z-index: 1;
-  width: clamp(23px, calc(var(--note-finder-row-height) - 12px), 29px);
-  height: clamp(23px, calc(var(--note-finder-row-height) - 12px), 29px);
+  z-index: 2;
+  width: clamp(19px, calc(var(--note-finder-row-height) - 17px), 25px);
+  height: clamp(19px, calc(var(--note-finder-row-height) - 17px), 25px);
   padding: 0;
   border: 1px solid color-mix(in srgb, var(--note-color) 52%, transparent);
   border-radius: 50%;
-  background: color-mix(in srgb, var(--ink-mute) 42%, transparent);
+  background: color-mix(in srgb, var(--ink-mute) 30%, transparent);
   color: var(--ink-soft);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: clamp(8px, 1.9vh, 10px);
+  font-size: clamp(7px, 1.65vh, 9px);
   font-weight: 800;
   line-height: 1;
   letter-spacing: 0;
-  opacity: 0.48;
+  opacity: 0.32;
   box-shadow: none;
   cursor: pointer;
   appearance: none;
